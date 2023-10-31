@@ -12,7 +12,8 @@ class Node(object):
     cost (int): The cost of the path from the initial state to the node.
     
   Methods:
-    expand(): Returns a list of neighbors expanded from the node.
+    expand() -> List[Node]: 
+      Returns a list of neighbors expanded from the node.
   """
   __slots__ = ['state', 'parent', 'action', 'cost']
 

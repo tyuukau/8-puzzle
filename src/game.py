@@ -17,6 +17,9 @@ class Game(object):
   Attributes:
     game_config (GameConfig): The configuration of the game, including the start and goal states.
     algorithm (SearchAlgorithm): The search algorithm to use to solve the game.
+    
+  Methods:
+    solve(): Solves the given game configuration using the given algorithm.
   '''
   __slots__ = ['game_config', 'algorithm', 'heuristic']
 

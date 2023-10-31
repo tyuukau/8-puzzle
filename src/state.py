@@ -2,7 +2,28 @@ from __future__ import annotations
 from typing import List, Tuple, Set, Optional, Callable
 import math
 
+import math
+from typing import Tuple
+
 class State(object):
+  """
+  Represents a state of the 8-puzzle game.
+
+  Attributes:
+    width (int): The width of the puzzle board.
+    array (Tuple[int]): The flattened representation of the puzzle board.
+    blank (int): The index of the blank tile (0) in the puzzle board.
+
+  Methods:
+    idx_to_val(self, idx: int) -> Tuple[int, int]:
+      Converts an index in the flattened array to a (row, col) tuple.
+    val_to_idx(self, x: int, y: int) -> int:
+      Converts a (row, col) tuple to an index in the flattened array.
+    swap(self, x_old: int, y_old: int, x_new: int, y_new: int) -> State:
+      Swaps the position of two tiles in the puzzle board and returns a new State object.
+    find_blank(self) -> Tuple[int, int]:
+      Returns the (row, col) tuple of the blank tile in the puzzle board.
+  """
   __slots__ = ['width', 'array', 'blank']
 
   def __init__(self, array: Tuple[int], blank: int=0) -> None:
