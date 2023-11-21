@@ -70,16 +70,16 @@ class Node(object):
 
     def expand(self) -> List[Self]:
         children = []
-        x_old, y_old = self.state.find_blank()
+        i_old, j_old = self.state.find_blank()
         action_dict = [
-            (x_old - 1, y_old, Action.UP),
-            (x_old, y_old - 1, Action.LEFT),
-            (x_old + 1, y_old, Action.DOWN),
-            (x_old, y_old + 1, Action.RIGHT),
+            (i_old - 1, j_old, Action.UP),
+            (i_old + 1, j_old, Action.DOWN),
+            (i_old, j_old - 1, Action.LEFT),
+            (i_old, j_old + 1, Action.RIGHT),
         ]
-        for x_new, y_new, action in action_dict:
+        for i_new, j_new, action in action_dict:
             try:
-                new_state = self.state.swap(x_old, y_old, x_new, y_new)
+                new_state = self.state.swap(i_old, j_old, i_new, j_new)
                 children.append(
                     Node(state=new_state, parent=self, action=action, cost=self.cost + 1)
                 )
@@ -133,16 +133,16 @@ class PNode(Node):
 
     def expand(self) -> List[Self]:
         children = []
-        x_old, y_old = self.state.find_blank()
+        i_old, j_old = self.state.find_blank()
         action_dict = [
-            (x_old - 1, y_old, Action.LEFT),
-            (x_old + 1, y_old, Action.RIGHT),
-            (x_old, y_old - 1, Action.UP),
-            (x_old, y_old + 1, Action.DOWN),
+            (i_old - 1, j_old, Action.LEFT),
+            (i_old + 1, j_old, Action.RIGHT),
+            (i_old, j_old - 1, Action.UP),
+            (i_old, j_old + 1, Action.DOWN),
         ]
-        for x_new, y_new, action in action_dict:
+        for i_new, j_new, action in action_dict:
             try:
-                new_state = self.state.swap(x_old, y_old, x_new, y_new)
+                new_state = self.state.swap(i_old, j_old, i_new, j_new)
                 children.append(
                     PNode(state=new_state, parent=self, action=action, cost=self.cost + 1)
                 )
