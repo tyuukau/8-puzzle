@@ -1,49 +1,151 @@
-from __future__ import annotations
-from typing import List, Tuple, Set, Optional, Callable
+from typing import List, Optional, Self
+from enum import Enum
+
+from state import State
+
+
+class Action(Enum):
+    UP = "up"
+    DOWN = "down"
+    LEFT = "left"
+    RIGHT = "right"
+
 
 class Node(object):
-  """
-  Represents a node in a search tree.
+    """
+    Represents a node in a search tree.
 
-  Attributes:
-    state (State): The state of the node.
-    parent (Node): The parent node of the node.
-    action (str): The action taken to reach the node.
-    cost (int): The cost of the path from the initial state to the node.
-    
-  Methods:
-    expand() -> List[Node]: 
-      Returns a list of neighbors expanded from the node.
-  """
-  __slots__ = ['state', 'parent', 'action', 'cost']
+    Attributes:
+      state (State): The state of the node.
+      parent (Node): The parent node of the node.
+      action (str): The action taken to reach the node.
+      cost (int): The cost of the path from the initial state to the node.
 
-  def __init__(self, state, parent: Optional[Node]=None, action: Optional[str]=None, cost: int=0) -> None:
-    self.state = state
-    self.parent = parent
-    self.action = action
-    self.cost = cost
+    Methods:
+      expand() -> List[Node]:
+        Returns a list of neighbors expanded from the node.
+    """
 
-  def __repr__(self) -> str:
-    return f'Node(state={self.state}, parent={self.parent}, action={self.action}, cost={self.cost})'
+    __slots__ = ["state", "parent", "action", "cost"]
 
-  def __str__(self) -> str:
-    return f'Node(state={self.state}, parent={self.parent}, action={self.action}, cost={self.cost})'
+    def __init__(
+        self,
+        state: State,
+        parent: Optional[Self] = None,
+        action: Optional[Action] = None,
+        cost: int = 0,
+    ) -> None:
+        self.state = state
+        self.parent = parent
+        self.action = action
+        self.cost = cost
 
-  def __eq__(self, other) -> bool:
-    return self.state == other.state
+    def __repr__(self) -> str:
+        if self.parent is not None:
+            return f"Node(state={self.state}, parent.state = {self.parent.state}, action={self.action}, cost={self.cost})"
+        else:
+            return f"Node(state={self.state}, parent = None, action={self.action}, cost={self.cost})"
 
-  def __lt__(self, other) -> bool:
-    return self.cost < other.cost
+    def __str__(self) -> str:
+        if self.parent is not None:
+            return f"Node(state={self.state}, parent.state = {self.parent.state}, action={self.action}, cost={self.cost})"
+        else:
+            return f"Node(state={self.state}, parent = None, action={self.action}, cost={self.cost})"
 
-  def expand(self) -> List[Node]:
-    children = []
-    x_old, y_old = self.state.find_blank()
-    action_dict = [(x_old - 1, y_old, 'Up'), (x_old + 1, y_old, 'Down'),
-                   (x_old, y_old - 1, 'Left'), (x_old, y_old + 1, 'Right')]
-    for (x_new, y_new, action) in action_dict:
-      try:
-        new_state = self.state.swap(x_old, y_old, x_new, y_new)
-        children.append(Node(state=new_state, parent=self, action=action, cost=self.cost+1))
-      except AssertionError:
-        continue
-    return children
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, Node):
+            return False
+        return (
+            self.state == other.state
+            and self.parent == other.parent
+            and self.action == other.action
+            and self.cost == other.cost
+        )
+
+    def __lt__(self, other) -> bool:
+        return self.cost < other.cost
+
+    def __hash__(self) -> int:
+        return hash((self.state, self.parent, self.action, self.cost))
+
+    def expand(self) -> List[Self]:
+        children = []
+        x_old, y_old = self.state.find_blank()
+        action_dict = [
+            (x_old - 1, y_old, Action.UP),
+            (x_old, y_old - 1, Action.LEFT),
+            (x_old + 1, y_old, Action.DOWN),
+            (x_old, y_old + 1, Action.RIGHT),
+        ]
+        for x_new, y_new, action in action_dict:
+            try:
+                new_state = self.state.swap(x_old, y_old, x_new, y_new)
+                children.append(
+                    Node(state=new_state, parent=self, action=action, cost=self.cost + 1)
+                )
+            except AssertionError:
+                continue
+        return children
+
+
+class PNode(Node):
+    __slots__ = ["f_cost"]
+
+    def __init__(
+        self,
+        state: State,
+        parent: Optional[Self] = None,
+        action: Optional[Action] = None,
+        cost: int = 0,
+        f_cost: int = 0,
+    ):
+        super().__init__(state, parent, action, cost)
+        self.f_cost = f_cost
+
+    def __repr__(self) -> str:
+        if self.parent is not None:
+            return f"Node(state={self.state}, parent.state = {self.parent.state}, action={self.action}, cost={self.cost}, path={self.f_cost})"
+        else:
+            return f"Node(state={self.state}, parent = None, action={self.action}, cost={self.cost}, path={self.f_cost})"
+
+    def __str__(self) -> str:
+        if self.parent is not None:
+            return f"Node(state={self.state}, parent.state = {self.parent.state}, action={self.action}, cost={self.cost}, path={self.f_cost})"
+        else:
+            return f"Node(state={self.state}, parent = None, action={self.action}, cost={self.cost}, path={self.f_cost})"
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, PNode):
+            return False
+        return (
+            self.state == other.state
+            and self.parent == other.parent
+            and self.action == other.action
+            and self.cost == other.cost
+            and self.f_cost == self.f_cost
+        )
+
+    def __lt__(self, other) -> bool:
+        return self.cost < other.cost
+
+    def __hash__(self) -> int:
+        return hash((self.state, self.parent, self.action, self.cost, self.f_cost))
+
+    def expand(self) -> List[Self]:
+        children = []
+        x_old, y_old = self.state.find_blank()
+        action_dict = [
+            (x_old - 1, y_old, Action.LEFT),
+            (x_old + 1, y_old, Action.RIGHT),
+            (x_old, y_old - 1, Action.UP),
+            (x_old, y_old + 1, Action.DOWN),
+        ]
+        for x_new, y_new, action in action_dict:
+            try:
+                new_state = self.state.swap(x_old, y_old, x_new, y_new)
+                children.append(
+                    PNode(state=new_state, parent=self, action=action, cost=self.cost + 1)
+                )
+            except AssertionError:
+                continue
+        return children
