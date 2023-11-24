@@ -6,11 +6,11 @@ def mistile_distance(current_state: State, goal_state: State) -> int:
     Calculates the misplaced-tile distance between the current state and the goal state.
 
     Args:
-      current_state (State): The current state of the puzzle.
-      goal_state (State): The goal state of the puzzle.
+    - `current_state` (`State`): The current state of the puzzle.
+    - `goal_state` (`State`): The goal state of the puzzle.
 
     Returns:
-      int: The Manhattan distance between the current state and the goal state.
+    - `int`: The Manhattan distance between the current state and the goal state.
     """
     return sum(c1 != c2 for c1, c2 in zip(current_state.array, goal_state.array))
 
@@ -20,11 +20,11 @@ def manhattan_distance(current_state: State, goal_state: State) -> int:
     Calculates the Manhattan distance between the current state and the goal state.
 
     Args:
-      current_state (State): The current state of the puzzle.
-      goal_state (State): The goal state of the puzzle.
+    - `current_state` (`State`): The current state of the puzzle.
+    - `goal_state` (`State`): The goal state of the puzzle.
 
     Returns:
-      int: The Manhattan distance between the current state and the goal state.
+    - `int`: The Manhattan distance between the current state and the goal state.
     """
     goal_pos = {
         val: goal_state.idx_to_pos(idx) for idx, val in enumerate(goal_state.array) if val != 0
@@ -44,11 +44,11 @@ def gaschnig_distance(current_state: State, goal_state: State) -> int:
     Calculates the Gaschnig distance between the current state and the goal state.
 
     Args:
-      current_state (State): The current state of the puzzle.
-      goal_state (State): The goal state of the puzzle.
+    - `current_state` (`State`): The current state of the puzzle.
+    - `goal_state` (`State`): The goal state of the puzzle.
 
     Returns:
-      int: The Manhattan distance between the current state and the goal state.
+    - `int`: The Manhattan distance between the current state and the goal state.
 
     See here: https://cse-robotics.engr.tamu.edu/dshell/cs625/gaschnig-note.pdf.
     """

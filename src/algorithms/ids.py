@@ -8,8 +8,7 @@ class IDS(UninformedSearchAlgorithm):
     Iterative Deepening Search (IDS) algorithm implementation.
 
     Args:
-      max_depth : int, optional
-        Maximum depth to search for a solution. Default is 10000.
+    - `max_depth` (`int`): Maximum depth to search for a solution. Default is 10000.
     """
 
     def __init__(self, max_depth: int = 10000) -> None:
@@ -61,8 +60,7 @@ class IDSWithCyclePruning(UninformedSearchAlgorithm):
     Includes cycle pruning.
 
     Args:
-      max_depth : int, optional
-        Maximum depth to search for a solution. Default is 10000.
+    - `max_depth` (`int`): Maximum depth to search for a solution. Default is 10000.
     """
 
     def __init__(self, max_depth: int = 10000) -> None:

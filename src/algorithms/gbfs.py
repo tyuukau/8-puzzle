@@ -6,10 +6,10 @@ import heapq
 
 class GBFS(InformedSearchAlgorithm):
     """
-    A* search algorithm implementation.
+    GBFS search algorithm implementation.
 
     Args:
-      heuristic (Callable): A function that takes two arguments: the current state and the goal state,
+    - `heuristic (Callable)`: A function that takes two arguments: the current state and the goal state,
         and returns the estimated cost to reach the goal state from the current state.
     """
 
@@ -18,9 +18,7 @@ class GBFS(InformedSearchAlgorithm):
 
     def search(self, start: Node, goal: Node) -> SearchResult:
         frontier = []
-        frontier.append(
-            (self.heuristic(start.state, goal.state), -start.cost, start)
-        )
+        frontier.append((self.heuristic(start.state, goal.state), -start.cost, start))
 
         closed = set()
 

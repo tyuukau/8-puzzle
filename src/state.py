@@ -7,18 +7,18 @@ class State(object):
     Represents a state of the 8-puzzle game.
 
     Attributes:
-      width (int): The width of the puzzle board.
-      array (Tuple[int]): The flattened representation of the puzzle board.
-      blank (int): The index of the blank tile (0) in the puzzle board.
+    - `width (int)`: The width of the puzzle board.
+    - `array (Tuple[int])`: The flattened representation of the puzzle board.
+    - `blank (int)`: The index of the blank tile (0) in the puzzle board.
 
     Methods:
-      idx_to_val(self, idx: int) -> Tuple[int, int]:
+    - `idx_to_val(self, idx: int) -> Tuple[int, int]`:
         Converts an index in the flattened array to a (row, col) tuple.
-      val_to_idx(self, x: int, y: int) -> int:
+    - `val_to_idx(self, i: int, j: int) -> int`:
         Converts a (row, col) tuple to an index in the flattened array.
-      swap(self, x_old: int, y_old: int, x_new: int, y_new: int) -> State:
+    - `swap(self, i_old: int, j_old: int, i_new: int, j_new: int) -> State`:
         Swaps the position of two tiles in the puzzle board and returns a new State object.
-      find_blank(self) -> Tuple[int, int]:
+    - `find_blank(self) -> Tuple[int, int]`:
         Returns the (row, col) tuple of the blank tile in the puzzle board.
     """
 
@@ -46,21 +46,21 @@ class State(object):
         if len(self.array) != self.width**2:
             raise ValueError("The length of the array must be width squared")
 
-        if any(x < 0 or x > self.width**2 - 1 for x in self.array):
+        if any(m < 0 or m > self.width**2 - 1 for m in self.array):
             raise ValueError("All numbers in a state must be >= 0 and <= width*width-1")
 
     def idx_to_pos(self, idx: int) -> Tuple[int, int]:
         return idx // self.width, idx % self.width
 
-    def val_to_idx(self, x: int, y: int) -> int:
-        return x * self.width + y
+    def val_to_idx(self, i: int, j: int) -> int:
+        return i * self.width + j
 
-    def swap(self, x_old: int, y_old: int, x_new: int, y_new: int) -> Self:
-        assert 0 <= x_new < self.width and 0 <= y_new < self.width
+    def swap(self, i_old: int, j_old: int, i_new: int, j_new: int) -> Self:
+        assert 0 <= i_new < self.width and 0 <= j_new < self.width
         array_new = list(self.array)
 
-        old_idx = self.val_to_idx(x_old, y_old)
-        new_idx = self.val_to_idx(x_new, y_new)
+        old_idx = self.val_to_idx(i_old, j_old)
+        new_idx = self.val_to_idx(i_new, j_new)
 
         array_new[old_idx], array_new[new_idx] = array_new[new_idx], array_new[old_idx]
         return State(array=tuple(array_new))

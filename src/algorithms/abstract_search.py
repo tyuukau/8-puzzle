@@ -13,6 +13,19 @@ class Result(Enum):
 
 @dataclass
 class SearchResult(object):
+    """
+    Represents the result of a search algorithm.
+
+    Attributes:
+    - `result (Result)`: The result of the search.
+    - `path (Union[List[Node], None])`: The path from the start node to the goal node, if found.
+    - `time_cp (int)`: The time complexity of the search algorithm.
+    - `space_cp (int)`: The space complexity of the search algorithm.
+
+    Methods:
+    - `print_result()`: Print the result. If a path is found, print the path.
+    """
+
     result: Result
     path: Union[List[Node], None]
     time_cp: int
@@ -36,18 +49,9 @@ class SearchAlgorithm(object):
     An abstract class representing a search algorithm. Subclasses should implement the `search`
     method to define the specific search algorithm.
 
-    Attributes:
-      None
-
     Methods:
-      search(start: Node, goal: Node) -> SearchResult:
-        Searches for a path from the start node to the goal node.
-
-        Returns a SearchResult containing:
-          - A string representing the name of the search algorithm used.
-          - A list of nodes representing the path from the start node to the goal node.
-          - An integer representing the time complexity.
-          - An integer representing the space complexity.
+    - `search(start: Node, goal: Node) -> SearchResult`:
+        Searches for a path from the start node to the goal node. Returns a `SearchResult` object.
     """
 
     def _is_goal(self, node: Node, goal: Node) -> bool:
@@ -86,7 +90,7 @@ class InformedSearchAlgorithm(SearchAlgorithm):
     specific search algorithm.
 
     Attributes:
-      heuristic (Callable): A function that estimates the cost of reaching the goal state from a
+    - `heuristic (Callable)`: A function that estimates the cost of reaching the goal state from a
       given state.
     """
 

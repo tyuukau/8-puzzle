@@ -14,11 +14,11 @@ class Game(object):
     Represents an instance of the n-puzzle game.
 
     Attributes:
-      game_config (GameConfig): The configuration of the game, including the start and goal states.
-      algorithm (SearchAlgorithm): The search algorithm to use to solve the game.
+    - `game_config` (`GameConfig`): The configuration of the game, including the start and goal states.
+    - `algorithm` (`SearchAlgorithm`): The search algorithm to use to solve the game.
 
     Methods:
-      solve(): Solves the given game configuration using the given algorithm.
+    - `solve()`: Solves the given game configuration using the given algorithm.
     """
 
     __slots__ = ["game_config", "algorithm", "heuristic"]
@@ -40,10 +40,15 @@ def game_generator(n: int = 3) -> GameConfig:
     Generates a new game configuration for the 8-puzzle game.
 
     Args:
-      n (int): The size of the puzzle. Default is 3.
+    - `n` (`int`): The size of the puzzle. Default is 3.
 
     Returns:
-      GameConfig: A new game configuration object containing the start and goal states.
+    - `GameConfig`: A new game configuration object containing the start and goal states.
+
+    Example:
+    ```
+    game_config = game_generator(n = 4)
+    ```
     """
     try:
         start = [i for i in range(n**2)]

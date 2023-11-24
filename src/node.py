@@ -16,13 +16,13 @@ class Node(object):
     Represents a node in a search tree.
 
     Attributes:
-      state (State): The state of the node.
-      parent (Node): The parent node of the node.
-      action (str): The action taken to reach the node.
-      cost (int): The cost of the path from the initial state to the node.
+    - `state` (`State`): The state of the node.
+    - `parent` (`Node`): The parent node of the node.
+    - `action` (`str`): The action taken to reach the node.
+    - `cost` (`int`): The cost of the path from the initial state to the node.
 
     Methods:
-      expand() -> List[Node]:
+    - `expand() -> List[Node]`:
         Returns a list of neighbors expanded from the node.
     """
 

@@ -7,11 +7,19 @@ class GameConfig(object):
     Stores game configuration.
 
     Attributes:
-      width (int): Width of the square puzzle grid.
-      start_state (State): Initial state of the puzzle represented as a list of integers.
-      goal_state (State): Goal state of the puzzle represented as a list of integers.
-      blank (int): The value represented as blank in the grid, default is 0.
-      solvable (bool): A boolean indicating if the puzzle is solvable. Calculated using self._is_solvable().
+    - `width: int`): Width of the square puzzle grid.
+    - `start_state` (`State`): Initial state of the puzzle represented as a tuple of integers.
+    - `goal_state` (`State`): Goal state of the puzzle represented as a tuple of integers.
+    - `blank` (`int`): The value represented as blank in the grid, default is 0.
+    - `solvable` (`bool`): A boolean indicating if the puzzle is solvable. Calculated using `self._is_solvable()`.
+
+    Example:
+    ```
+    game_config = GameConfig(
+        start_state=State((3, 7, 4, 8, 5, 6, 2, 0, 1)),
+        goal_state=State((0, 1, 2, 3, 4, 5, 6, 7, 8)),
+    )
+    ```
     """
 
     __slots__ = ["width", "start_state", "goal_state", "solvable"]
