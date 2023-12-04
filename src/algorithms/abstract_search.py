@@ -57,8 +57,11 @@ class SearchAlgorithm(ABC):
         Must be implemented.
     """
 
-    def _is_goal(self, node: Node, goal_state: State) -> bool:
-        return node.state == goal_state
+    def set_goal(self, goal_state: State) -> None:
+        self.goal_state = goal_state
+
+    def _is_goal(self, node: Node) -> bool:
+        return node.state == self.goal_state
 
     def _reconstruct_path(self, node: Node) -> List[Node]:
         path = []

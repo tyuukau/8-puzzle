@@ -13,7 +13,7 @@ class RBFS(InformedSearchAlgorithm):
     def _rbfs(
         self, node: Node, goal_state: State, limit: int, time_cp: int = 1, space_cp: int = 1
     ) -> Tuple[SearchResult, int]:
-        if self._is_goal(node, goal_state):
+        if self._is_goal(node):
             path = self._reconstruct_path(node)
             return SearchResult(Result.SUCCESS, path, time_cp, space_cp), limit
 
@@ -60,7 +60,7 @@ class PRBFS(InformedSearchAlgorithm):
     def _rbfs(
         self, node: PNode, goal_state: State, limit: int, time_cp: int = 1, space_cp: int = 1
     ) -> Tuple[SearchResult, int]:
-        if self._is_goal(node, goal_state):
+        if self._is_goal(node):
             path = self._reconstruct_path(node)
             return SearchResult(Result.SUCCESS, path, time_cp, space_cp), limit
 

@@ -36,7 +36,7 @@ class GBFS(InformedSearchAlgorithm):
             time_cp += 1
             space_cp = max(space_cp, len(closed) + len(frontier))
 
-            if self._is_goal(node, goal_state):
+            if self._is_goal(node):
                 path = self._reconstruct_path(node)
                 return SearchResult(
                     result=Result.SUCCESS, path=path, time_cp=time_cp, space_cp=space_cp

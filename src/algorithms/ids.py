@@ -17,7 +17,7 @@ class IDS(UninformedSearchAlgorithm):
         super().__init__()
         self.max_depth = max_depth
 
-    def _dls(self, start: Node, goal_state: State, limit: int) -> SearchResult:
+    def _dls(self, start: Node, limit: int) -> SearchResult:
         frontier = [(start, 0)]
 
         time_cp = 0
@@ -30,7 +30,7 @@ class IDS(UninformedSearchAlgorithm):
 
             time_cp += 1
 
-            if self._is_goal(node, goal_state):
+            if self._is_goal(node):
                 result = Result.SUCCESS
                 path = self._reconstruct_path(node)
                 return SearchResult(
@@ -52,7 +52,7 @@ class IDS(UninformedSearchAlgorithm):
         start = Node(start_state)
 
         for depth in range(self.max_depth):
-            search_result = self._dls(start, goal_state, limit=depth)
+            search_result = self._dls(start, limit=depth)
             if search_result.result != Result.CUTOFF:
                 return search_result
         return search_result
@@ -71,7 +71,7 @@ class IDSWithCyclePruning(UninformedSearchAlgorithm):
         super().__init__()
         self.max_depth = max_depth
 
-    def _dls(self, start: Node, goal_state: State, limit: int) -> SearchResult:
+    def _dls(self, start: Node, limit: int) -> SearchResult:
         frontier = [start]
 
         expanded = []
@@ -91,7 +91,7 @@ class IDSWithCyclePruning(UninformedSearchAlgorithm):
 
             time_cp += 1
 
-            if self._is_goal(node, goal_state):
+            if self._is_goal(node):
                 result = Result.SUCCESS
                 path = self._reconstruct_path(node)
                 return SearchResult(
@@ -113,7 +113,7 @@ class IDSWithCyclePruning(UninformedSearchAlgorithm):
         start = Node(start_state)
 
         for depth in range(self.max_depth):
-            search_result = self._dls(start, goal_state, limit=depth)
+            search_result = self._dls(start, limit=depth)
             if search_result.result != Result.CUTOFF:
                 return search_result
         return search_result

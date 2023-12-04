@@ -30,6 +30,8 @@ class Game(object):
         print(f"Algorithm: {self.algorithm.__class__.__name__}")
         start_state = self.game_config.start_state
         goal_state = self.game_config.goal_state
+
+        self.algorithm.set_goal(goal_state)
         search_result = self.algorithm.search(start_state, goal_state)
         search_result.print_result()
 
