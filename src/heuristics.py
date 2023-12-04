@@ -26,15 +26,12 @@ def manhattan_distance(current_state: State, goal_state: State) -> int:
     Returns:
     - `int`: The Manhattan distance between the current state and the goal state.
     """
-    goal_pos = {
-        val: goal_state.idx_to_pos(idx) for idx, val in enumerate(goal_state.array) if val != 0
-    }
+    goal_pos = goal_state.get_positions()
 
     sum = 0
-    for idx, val in enumerate(current_state.array):
-        if val != 0:
-            current_i, current_j = current_state.idx_to_pos(idx)
-            goal_i, goal_j = goal_pos[val]
+    for cell, (current_i, current_j) in current_state.get_positions().items():
+        if cell != 0:
+            goal_i, goal_j = goal_pos[cell]
             sum += abs(current_i - goal_i) + abs(current_j - goal_j)
     return sum
 
@@ -73,8 +70,8 @@ def gaschnig_distance(current_state: State, goal_state: State) -> int:
 
 
 def main():
-    a = State((1, 2, 3, 4, 0, 6, 7, 5, 8))
-    b = State((1, 2, 3, 4, 5, 6, 7, 8, 0))
+    a = State(1, 2, 3, 4, 0, 6, 7, 5, 8)
+    b = State(1, 2, 3, 4, 5, 6, 7, 8, 0)
     print(mistile_distance(a, b))
     print(manhattan_distance(a, b))
     print(gaschnig_distance(a, b))
