@@ -5,7 +5,15 @@ from state import State
 
 
 class RBFS(InformedSearchAlgorithm):
-    def __init__(self, heuristic: Callable, limit: int = 1e15) -> None:
+    """
+    Recursive Best First Search (RBFS) algorithm implementation.
+
+    Args:
+    - `heuristic` (`Callable[[State, State], int]`): The heuristic function.
+    - `limit` (`int`): Limit for the f_cost of nodes.
+    """
+
+    def __init__(self, heuristic: Callable[[State, State], int], limit: int = 1e15) -> None:
         super().__init__(heuristic)
         self.limit = limit
         self.f_cost = {}
@@ -52,7 +60,14 @@ class RBFS(InformedSearchAlgorithm):
 
 
 class PRBFS(InformedSearchAlgorithm):
-    def __init__(self, heuristic: Callable, limit: int = 1e15) -> None:
+    """
+    Recursive Best First Search (RBFS) algorithm implementation using PNode.
+
+    Args:
+    - `limit` (`int`): Limit for the f_cost of nodes.
+    """
+
+    def __init__(self, heuristic: Callable[[State, State], int], limit: int = 1e15) -> None:
         super().__init__(heuristic)
         self.limit = limit
 

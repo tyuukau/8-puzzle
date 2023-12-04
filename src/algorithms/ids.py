@@ -9,6 +9,7 @@ class IDS(UninformedSearchAlgorithm):
     Iterative Deepening Search (IDS) algorithm implementation.
 
     Args:
+    - `heuristic` (`Callable[[State, State], int]`): The heuristic function.
     - `max_depth` (`int`): Maximum depth to search for a solution. Default is 10000.
     """
 

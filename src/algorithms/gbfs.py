@@ -11,11 +11,10 @@ class GBFS(InformedSearchAlgorithm):
     GBFS search algorithm implementation.
 
     Args:
-    - `heuristic (Callable)`: A function that takes two arguments: the current state and the goal state,
-        and returns the estimated cost to reach the goal state from the current state.
+    - `heuristic` (`Callable[[State, State], int]`): The heuristic function.
     """
 
-    def __init__(self, heuristic: Callable) -> None:
+    def __init__(self, heuristic: Callable[[State, State], int]) -> None:
         super().__init__(heuristic)
 
     def _search(self, start_state: State) -> SearchResult:

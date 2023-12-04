@@ -105,11 +105,10 @@ class InformedSearchAlgorithm(SearchAlgorithm):
     specific search algorithm.
 
     Attributes:
-    - `heuristic (Callable)`: A function that estimates the cost of reaching the goal state from a
-      given state.
+    - `heuristic` (`Callable[[State, State], int]`): The heuristic function.
     """
 
-    def __init__(self, heuristic: Callable) -> None:
+    def __init__(self, heuristic: Callable[[State, State], int]) -> None:
         super().__init__()
         self.heuristic = heuristic
 
