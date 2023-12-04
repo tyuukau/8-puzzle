@@ -52,9 +52,9 @@ class SearchAlgorithm(ABC):
     method to define the specific search algorithm.
 
     Methods:
-    - `set_goal(goal_state: State) -> None`:
-        Set the goal state of the search algorithm.
-    - `search(start: Node) -> SearchResult`:
+    - `solve(start_state: State, goal_state: State, print: bool = True) -> None`:
+        Set the goal state of the search algorithm, then search using `_search()`
+    - `_search(start: Node) -> SearchResult`:
         Searches for a path from the start node to the goal node. Returns a `SearchResult` object.
         Must be implemented.
     """
@@ -74,7 +74,7 @@ class SearchAlgorithm(ABC):
 
     @abstractmethod
     def _search(self, start_state: State) -> SearchResult:
-        pass
+        ...
 
     def solve(self, start_state: State, goal_state: State, print: bool = True) -> None:
         self._set_goal(goal_state)
