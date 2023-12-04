@@ -65,7 +65,7 @@ class State(object):
         array_new[old_idx], array_new[new_idx] = array_new[new_idx], array_new[old_idx]
         return State(array=tuple(array_new))
 
-    def find_blank(self) -> Tuple[int, int]:
+    def get_blank_tile(self) -> Tuple[int, int]:
         for idx, cell in enumerate(self.array):
             if cell == 0:
                 return self.idx_to_pos(idx)
