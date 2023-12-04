@@ -30,7 +30,7 @@ class Game(object):
         print(f"Algorithm: {self.algorithm.__class__.__name__}")
         start_state = self.game_config.start_state
         goal_state = self.game_config.goal_state
-        search_result = self.algorithm.search(Node(start_state), goal_state)
+        search_result = self.algorithm.search(start_state, goal_state)
         search_result.print_result()
 
 
@@ -75,7 +75,7 @@ def main():
     )
     algorithm = AStar(heuristic=manhattan_distance)
     g = Game(game_config=game_config, algorithm=algorithm)
-    if game_config.is_solvable():
+    if g.game_config.is_solvable():
         g.solve()
 
 

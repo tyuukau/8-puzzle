@@ -68,7 +68,7 @@ class SearchAlgorithm(ABC):
         return path[::-1]
 
     @abstractmethod
-    def search(self, start: Node, goal_state: State) -> SearchResult:
+    def search(self, start_state: State, goal_state: State) -> SearchResult:
         pass
 
 

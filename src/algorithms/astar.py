@@ -18,7 +18,9 @@ class AStar(InformedSearchAlgorithm):
     def __init__(self, heuristic: Callable) -> None:
         super().__init__(heuristic)
 
-    def search(self, start: Node, goal_state: State) -> SearchResult:
+    def search(self, start_state: State, goal_state: State) -> SearchResult:
+        start = Node(start_state)
+
         frontier = []
         frontier.append(
             (start.cost + self.heuristic(start.state, goal_state), -start.cost, start)
