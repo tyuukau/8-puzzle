@@ -1,4 +1,5 @@
 import random
+from sys import exit
 
 from game_config import GameConfig
 from algorithms.abstract_search import SearchAlgorithm
@@ -19,17 +20,28 @@ class Game(object):
     - `solve()`: Solves the given game configuration using the given algorithm.
     """
 
-    __slots__ = ["game_config", "algorithm", "heuristic"]
+    __slots__ = ["game_config", "algorithm", "heuristic", "ignore_solvability"]
 
-    def __init__(self, game_config: GameConfig, algorithm: SearchAlgorithm) -> None:
+    def __init__(
+        self,
+        game_config: GameConfig,
+        algorithm: SearchAlgorithm,
+        ignore_solvability: bool = True,
+    ) -> None:
         self.game_config = game_config
         self.algorithm = algorithm
+        self.ignore_solvability = ignore_solvability
 
     def play(self) -> None:
         print(f"Algorithm: {self.algorithm.__class__.__name__}")
         start_state = self.game_config.start_state
         goal_state = self.game_config.goal_state
 
+        if not self.ignore_solvability:
+            if not self.game_config.is_solvable():
+                exit("Solvability is False. Game terminated.")
+        else:
+            print("Ignoring solvability...")
         self.algorithm.solve(start_state, goal_state)
 
 
@@ -73,9 +85,8 @@ def main():
         goal_state=State(0, 1, 2, 3, 4, 5, 6, 7, 8),
     )
     algorithm = AStar(heuristic=manhattan_distance)
-    g = Game(game_config=game_config, algorithm=algorithm)
-    if g.game_config.is_solvable():
-        g.play()
+    g = Game(game_config=game_config, algorithm=algorithm, ignore_solvability=True)
+    g.play()
 
 
 if __name__ == "__main__":
