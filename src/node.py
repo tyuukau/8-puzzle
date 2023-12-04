@@ -42,15 +42,19 @@ class Node(object):
 
     def __repr__(self) -> str:
         if self.parent is not None:
-            return f"Node(state={self.state}, parent.state = {self.parent.state}, action={self.action}, cost={self.cost})"
+            return f"Node(state={self.state}, parent.state={self.parent.state}, action={self.action}, cost={self.cost})"
         else:
-            return f"Node(state={self.state}, parent = None, action={self.action}, cost={self.cost})"
+            return (
+                f"Node(state={self.state}, parent=None, action={self.action}, cost={self.cost})"
+            )
 
     def __str__(self) -> str:
         if self.parent is not None:
-            return f"Node(state={self.state}, parent.state = {self.parent.state}, action={self.action}, cost={self.cost})"
+            return f"Node(state={self.state}, parent.state={self.parent.state}, action={self.action}, cost={self.cost})"
         else:
-            return f"Node(state={self.state}, parent = None, action={self.action}, cost={self.cost})"
+            return (
+                f"Node(state={self.state}, parent=None, action={self.action}, cost={self.cost})"
+            )
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Node):
@@ -104,15 +108,15 @@ class PNode(Node):
 
     def __repr__(self) -> str:
         if self.parent is not None:
-            return f"Node(state={self.state}, parent.state = {self.parent.state}, action={self.action}, cost={self.cost}, path={self.f_cost})"
+            return f"Node(state={self.state}, parent.state={self.parent.state}, action={self.action}, cost={self.cost}, path={self.f_cost})"
         else:
-            return f"Node(state={self.state}, parent = None, action={self.action}, cost={self.cost}, path={self.f_cost})"
+            return f"Node(state={self.state}, parent=None, action={self.action}, cost={self.cost}, path={self.f_cost})"
 
     def __str__(self) -> str:
         if self.parent is not None:
-            return f"Node(state={self.state}, parent.state = {self.parent.state}, action={self.action}, cost={self.cost}, path={self.f_cost})"
+            return f"Node(state={self.state}, parent.state={self.parent.state}, action={self.action}, cost={self.cost}, path={self.f_cost})"
         else:
-            return f"Node(state={self.state}, parent = None, action={self.action}, cost={self.cost}, path={self.f_cost})"
+            return f"Node(state={self.state}, parent=None, action={self.action}, cost={self.cost}, path={self.f_cost})"
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, PNode):

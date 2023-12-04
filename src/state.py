@@ -27,7 +27,7 @@ class State(object):
     def __init__(self, *args: int) -> None:
         self.array = args
         self.blank = 0
-        self.width = int(math.sqrt(len(args)))
+        self.width = math.isqrt(len(args))
         self._validate_data()
 
     def __repr__(self) -> str:
@@ -43,6 +43,9 @@ class State(object):
         return hash(self.array)
 
     def _validate_data(self) -> None:
+        if len(set(self.array)) != len(self.array):
+            raise ValueError("Each number may only appears once")
+
         if len(self.array) != self.width**2:
             raise ValueError("The length of the array must be width squared")
 

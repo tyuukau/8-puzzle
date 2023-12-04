@@ -29,7 +29,6 @@ class GameConfig(object):
         self.start_state = start_state
         self.goal_state = goal_state
         self._validate_data()
-        self.solvable = self._is_solvable()
 
     def __str__(self) -> str:
         return f"GameConfig(width={self.width}, start_state={self.start_state.array}, goal_state={self.goal_state.array}, solvable={self.solvable})"
@@ -52,7 +51,7 @@ class GameConfig(object):
                     inversions += 1
         return inversions
 
-    def _is_solvable(self) -> bool:
+    def is_solvable(self) -> bool:
         start_inversions = self._count_inversions(self.start_state.array)
         goal_inversions = self._count_inversions(self.goal_state.array)
         if self.width % 2 == 0:
