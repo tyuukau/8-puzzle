@@ -1,8 +1,10 @@
 from typing import List, Tuple, Callable, Union
 from enum import Enum
 from dataclasses import dataclass
+from abc import ABC, abstractmethod
 
 from node import Node
+from state import State
 
 
 class Result(Enum):
@@ -44,7 +46,7 @@ class SearchResult(object):
         print(f"Time: {self.time_cp}")
 
 
-class SearchAlgorithm(object):
+class SearchAlgorithm(ABC):
     """
     An abstract class representing a search algorithm. Subclasses should implement the `search`
     method to define the specific search algorithm.
@@ -52,10 +54,11 @@ class SearchAlgorithm(object):
     Methods:
     - `search(start: Node, goal: Node) -> SearchResult`:
         Searches for a path from the start node to the goal node. Returns a `SearchResult` object.
+        Must be implemented.
     """
 
-    def _is_goal(self, node: Node, goal: Node) -> bool:
-        return node.state == goal.state
+    def _is_goal(self, node: Node, goal_state: State) -> bool:
+        return node.state == goal_state
 
     def _reconstruct_path(self, node: Node) -> List[Node]:
         path = []
@@ -64,8 +67,9 @@ class SearchAlgorithm(object):
             node = node.parent
         return path[::-1]
 
-    def search(self, start: Node, goal: Node) -> SearchResult:
-        raise NotImplementedError()
+    @abstractmethod
+    def search(self, start: Node, goal_state: State) -> SearchResult:
+        pass
 
 
 class UninformedSearchAlgorithm(SearchAlgorithm):

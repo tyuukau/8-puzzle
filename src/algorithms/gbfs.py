@@ -1,7 +1,9 @@
 from typing import Callable
+import heapq
+
 from algorithms.abstract_search import Result, SearchResult, InformedSearchAlgorithm
 from node import Node
-import heapq
+from state import State
 
 
 class GBFS(InformedSearchAlgorithm):
@@ -16,9 +18,9 @@ class GBFS(InformedSearchAlgorithm):
     def __init__(self, heuristic: Callable) -> None:
         super().__init__(heuristic)
 
-    def search(self, start: Node, goal: Node) -> SearchResult:
+    def search(self, start: Node, goal_state: State) -> SearchResult:
         frontier = []
-        frontier.append((self.heuristic(start.state, goal.state), -start.cost, start))
+        frontier.append((self.heuristic(start.state, goal_state), -start.cost, start))
 
         closed = set()
 
@@ -32,7 +34,7 @@ class GBFS(InformedSearchAlgorithm):
             time_cp += 1
             space_cp = max(space_cp, len(closed) + len(frontier))
 
-            if self._is_goal(node, goal):
+            if self._is_goal(node, goal_state):
                 path = self._reconstruct_path(node)
                 return SearchResult(
                     result=Result.SUCCESS, path=path, time_cp=time_cp, space_cp=space_cp
@@ -43,7 +45,7 @@ class GBFS(InformedSearchAlgorithm):
                     heapq.heappush(
                         frontier,
                         (
-                            self.heuristic(child.state, goal.state),
+                            self.heuristic(child.state, goal_state),
                             -child.cost,
                             child,
                         ),

@@ -1,6 +1,8 @@
 from typing import List, Tuple, Set, Optional, Callable
 from algorithms.abstract_search import Result, SearchResult, UninformedSearchAlgorithm
+
 from node import Node
+from state import State
 
 
 class IDS(UninformedSearchAlgorithm):
@@ -15,7 +17,7 @@ class IDS(UninformedSearchAlgorithm):
         super().__init__()
         self.max_depth = max_depth
 
-    def _dls(self, start: Node, goal: Node, limit: int) -> SearchResult:
+    def _dls(self, start: Node, goal_state: State, limit: int) -> SearchResult:
         frontier = [(start, 0)]
 
         time_cp = 0
@@ -28,7 +30,7 @@ class IDS(UninformedSearchAlgorithm):
 
             time_cp += 1
 
-            if self._is_goal(node, goal):
+            if self._is_goal(node, goal_state):
                 result = Result.SUCCESS
                 path = self._reconstruct_path(node)
                 return SearchResult(
@@ -46,9 +48,9 @@ class IDS(UninformedSearchAlgorithm):
 
         return SearchResult(result=result, path=None, time_cp=time_cp, space_cp=space_cp)
 
-    def search(self, start: Node, goal: Node) -> SearchResult:
+    def search(self, start: Node, goal_state: State) -> SearchResult:
         for depth in range(self.max_depth):
-            search_result = self._dls(start, goal, limit=depth)
+            search_result = self._dls(start, goal_state, limit=depth)
             if search_result.result != Result.CUTOFF:
                 return search_result
         return search_result
@@ -67,7 +69,7 @@ class IDSWithCyclePruning(UninformedSearchAlgorithm):
         super().__init__()
         self.max_depth = max_depth
 
-    def _dls(self, start: Node, goal: Node, limit: int) -> SearchResult:
+    def _dls(self, start: Node, goal_state: State, limit: int) -> SearchResult:
         frontier = [start]
 
         expanded = []
@@ -87,7 +89,7 @@ class IDSWithCyclePruning(UninformedSearchAlgorithm):
 
             time_cp += 1
 
-            if self._is_goal(node, goal):
+            if self._is_goal(node, goal_state):
                 result = Result.SUCCESS
                 path = self._reconstruct_path(node)
                 return SearchResult(
@@ -105,9 +107,9 @@ class IDSWithCyclePruning(UninformedSearchAlgorithm):
 
         return SearchResult(result=result, path=None, time_cp=time_cp, space_cp=space_cp)
 
-    def search(self, start: Node, goal: Node) -> SearchResult:
+    def search(self, start: Node, goal_state: State) -> SearchResult:
         for depth in range(self.max_depth):
-            search_result = self._dls(start, goal, limit=depth)
+            search_result = self._dls(start, goal_state, limit=depth)
             if search_result.result != Result.CUTOFF:
                 return search_result
         return search_result
