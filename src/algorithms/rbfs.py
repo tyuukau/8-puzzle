@@ -43,7 +43,7 @@ class RBFS(InformedSearchAlgorithm):
             if search_result.result != Result.FAILURE:
                 return search_result, self.f_cost[best]
 
-    def search(self, start_state: State) -> SearchResult:
+    def _search(self, start_state: State) -> SearchResult:
         start = Node(start_state)
 
         self.f_cost[start] = 0
@@ -88,7 +88,7 @@ class PRBFS(InformedSearchAlgorithm):
             if search_result.result != Result.FAILURE:
                 return search_result, best.f_cost
 
-    def search(self, start_state: State) -> SearchResult:
+    def _search(self, start_state: State) -> SearchResult:
         start = Node(start_state)
 
         search_result, _ = self._rbfs(start, self.limit)

@@ -59,9 +59,6 @@ class SearchAlgorithm(ABC):
         Must be implemented.
     """
 
-    def set_goal(self, goal_state: State) -> None:
-        self.goal_state = goal_state
-
     def _is_goal(self, node: Node) -> bool:
         return node.state == self.goal_state
 
@@ -72,9 +69,18 @@ class SearchAlgorithm(ABC):
             node = node.parent
         return path[::-1]
 
+    def _set_goal(self, goal_state: State) -> None:
+        self.goal_state = goal_state
+
     @abstractmethod
-    def search(self, start_state: State) -> SearchResult:
+    def _search(self, start_state: State) -> SearchResult:
         pass
+
+    def solve(self, start_state: State, goal_state: State, print: bool = True) -> None:
+        self._set_goal(goal_state)
+        search_result = self._search(start_state)
+        if print:
+            search_result.print_result()
 
 
 class UninformedSearchAlgorithm(SearchAlgorithm):

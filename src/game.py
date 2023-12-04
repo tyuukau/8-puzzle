@@ -25,14 +25,12 @@ class Game(object):
         self.game_config = game_config
         self.algorithm = algorithm
 
-    def solve(self) -> None:
+    def play(self) -> None:
         print(f"Algorithm: {self.algorithm.__class__.__name__}")
         start_state = self.game_config.start_state
         goal_state = self.game_config.goal_state
 
-        self.algorithm.set_goal(goal_state)
-        search_result = self.algorithm.search(start_state)
-        search_result.print_result()
+        self.algorithm.solve(start_state, goal_state)
 
 
 def game_generator(n: int = 3) -> GameConfig:
@@ -77,7 +75,7 @@ def main():
     algorithm = AStar(heuristic=manhattan_distance)
     g = Game(game_config=game_config, algorithm=algorithm)
     if g.game_config.is_solvable():
-        g.solve()
+        g.play()
 
 
 if __name__ == "__main__":

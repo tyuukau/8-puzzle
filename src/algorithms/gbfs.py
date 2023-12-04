@@ -18,7 +18,7 @@ class GBFS(InformedSearchAlgorithm):
     def __init__(self, heuristic: Callable) -> None:
         super().__init__(heuristic)
 
-    def search(self, start_state: State) -> SearchResult:
+    def _search(self, start_state: State) -> SearchResult:
         start = Node(start_state)
 
         frontier = []

@@ -47,7 +47,7 @@ class IDS(UninformedSearchAlgorithm):
 
         return SearchResult(result=result, path=None, time_cp=time_cp, space_cp=space_cp)
 
-    def search(self, start_state: State) -> SearchResult:
+    def _search(self, start_state: State) -> SearchResult:
         start = Node(start_state)
 
         for depth in range(self.max_depth):
@@ -108,7 +108,7 @@ class IDSWithCyclePruning(UninformedSearchAlgorithm):
 
         return SearchResult(result=result, path=None, time_cp=time_cp, space_cp=space_cp)
 
-    def search(self, start_state: State) -> SearchResult:
+    def _search(self, start_state: State) -> SearchResult:
         start = Node(start_state)
 
         for depth in range(self.max_depth):
