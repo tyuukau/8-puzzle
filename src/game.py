@@ -1,11 +1,10 @@
-from game_config import GameConfig
-from algorithms.abstract_search import SearchAlgorithm
-from node import Node
-from state import State
 import random
 
+from game_config import GameConfig
+from algorithms.abstract_search import SearchAlgorithm
 from algorithms import IDS, IDSWithCyclePruning, AStar, GBFS, RBFS, PRBFS
-
+from node import Node
+from state import State
 from heuristics import *
 
 
@@ -74,9 +73,9 @@ def main():
         start_state=State(3, 7, 4, 8, 5, 6, 2, 0, 1),
         goal_state=State(0, 1, 2, 3, 4, 5, 6, 7, 8),
     )
-    algorithm = GBFS(heuristic=manhattan_distance)
+    algorithm = AStar(heuristic=manhattan_distance)
     g = Game(game_config=game_config, algorithm=algorithm)
-    if game_config.solvable:
+    if game_config.is_solvable():
         g.solve()
 
 
