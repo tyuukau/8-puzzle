@@ -57,10 +57,8 @@ def game_generator(n: int = 3) -> GameConfig:
         random.shuffle(start)
         random.shuffle(goal)
 
-        start_state_array, goal_state_array = tuple(start), tuple(goal)
-
-        start_state = State(array=start_state_array)
-        goal_state = State(array=goal_state_array)
+        start_state = State(*start)
+        goal_state = State(*goal)
 
         game_config = GameConfig(start_state=start_state, goal_state=goal_state)
 
@@ -73,8 +71,8 @@ def game_generator(n: int = 3) -> GameConfig:
 
 def main():
     game_config = GameConfig(
-        start_state=State((3, 7, 4, 8, 5, 6, 2, 0, 1)),
-        goal_state=State((0, 1, 2, 3, 4, 5, 6, 7, 8)),
+        start_state=State(3, 7, 4, 8, 5, 6, 2, 0, 1),
+        goal_state=State(0, 1, 2, 3, 4, 5, 6, 7, 8),
     )
     algorithm = GBFS(heuristic=manhattan_distance)
     g = Game(game_config=game_config, algorithm=algorithm)

@@ -16,8 +16,8 @@ class GameConfig(object):
     Example:
     ```
     game_config = GameConfig(
-        start_state=State((3, 7, 4, 8, 5, 6, 2, 0, 1)),
-        goal_state=State((0, 1, 2, 3, 4, 5, 6, 7, 8)),
+        start_state=State(3, 7, 4, 8, 5, 6, 2, 0, 1),
+        goal_state=State(0, 1, 2, 3, 4, 5, 6, 7, 8),
     )
     ```
     """
