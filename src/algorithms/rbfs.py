@@ -89,7 +89,7 @@ class PRBFS(InformedSearchAlgorithm):
                 return search_result, best.f_cost
 
     def _search(self, start_state: State) -> SearchResult:
-        start = Node(start_state)
+        start = PNode(start_state)
 
         search_result, _ = self._rbfs(start, self.limit)
         return search_result
