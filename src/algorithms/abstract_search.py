@@ -1,4 +1,4 @@
-from typing import List, Tuple, Callable, Union
+from typing import List, Callable, Union
 from enum import Enum
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
@@ -52,7 +52,9 @@ class SearchAlgorithm(ABC):
     method to define the specific search algorithm.
 
     Methods:
-    - `search(start: Node, goal: Node) -> SearchResult`:
+    - `set_goal(goal_state: State) -> None`:
+        Set the goal state of the search algorithm.
+    - `search(start: Node) -> SearchResult`:
         Searches for a path from the start node to the goal node. Returns a `SearchResult` object.
         Must be implemented.
     """
@@ -71,7 +73,7 @@ class SearchAlgorithm(ABC):
         return path[::-1]
 
     @abstractmethod
-    def search(self, start_state: State, goal_state: State) -> SearchResult:
+    def search(self, start_state: State) -> SearchResult:
         pass
 
 
@@ -104,3 +106,6 @@ class InformedSearchAlgorithm(SearchAlgorithm):
     def __init__(self, heuristic: Callable) -> None:
         super().__init__()
         self.heuristic = heuristic
+
+    def h_cost(self, node: Node) -> int:
+        return self.heuristic(node.state, self.goal_state)

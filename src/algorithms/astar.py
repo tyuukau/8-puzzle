@@ -18,13 +18,11 @@ class AStar(InformedSearchAlgorithm):
     def __init__(self, heuristic: Callable) -> None:
         super().__init__(heuristic)
 
-    def search(self, start_state: State, goal_state: State) -> SearchResult:
+    def search(self, start_state: State) -> SearchResult:
         start = Node(start_state)
 
         frontier = []
-        frontier.append(
-            (start.cost + self.heuristic(start.state, goal_state), -start.cost, start)
-        )
+        frontier.append((start.cost + self.h_cost(start), -start.cost, start))
 
         closed = set()
 
@@ -49,7 +47,7 @@ class AStar(InformedSearchAlgorithm):
                     heapq.heappush(
                         frontier,
                         (
-                            child.cost + self.heuristic(child.state, goal_state),
+                            child.cost + self.h_cost(child),
                             -child.cost,
                             child,
                         ),

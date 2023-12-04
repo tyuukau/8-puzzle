@@ -1,4 +1,3 @@
-from typing import List, Tuple, Set, Optional, Callable
 from algorithms.abstract_search import Result, SearchResult, UninformedSearchAlgorithm
 
 from node import Node
@@ -48,7 +47,7 @@ class IDS(UninformedSearchAlgorithm):
 
         return SearchResult(result=result, path=None, time_cp=time_cp, space_cp=space_cp)
 
-    def search(self, start_state: State, goal_state: State) -> SearchResult:
+    def search(self, start_state: State) -> SearchResult:
         start = Node(start_state)
 
         for depth in range(self.max_depth):
@@ -109,7 +108,7 @@ class IDSWithCyclePruning(UninformedSearchAlgorithm):
 
         return SearchResult(result=result, path=None, time_cp=time_cp, space_cp=space_cp)
 
-    def search(self, start_state: State, goal_state: State) -> SearchResult:
+    def search(self, start_state: State) -> SearchResult:
         start = Node(start_state)
 
         for depth in range(self.max_depth):

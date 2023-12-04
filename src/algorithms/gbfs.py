@@ -18,11 +18,11 @@ class GBFS(InformedSearchAlgorithm):
     def __init__(self, heuristic: Callable) -> None:
         super().__init__(heuristic)
 
-    def search(self, start_state: State, goal_state: State) -> SearchResult:
+    def search(self, start_state: State) -> SearchResult:
         start = Node(start_state)
 
         frontier = []
-        frontier.append((self.heuristic(start.state, goal_state), -start.cost, start))
+        frontier.append((self.h_cost(start), -start.cost, start))
 
         closed = set()
 
@@ -47,7 +47,7 @@ class GBFS(InformedSearchAlgorithm):
                     heapq.heappush(
                         frontier,
                         (
-                            self.heuristic(child.state, goal_state),
+                            self.h_cost(child),
                             -child.cost,
                             child,
                         ),

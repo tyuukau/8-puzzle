@@ -3,7 +3,6 @@ import random
 from game_config import GameConfig
 from algorithms.abstract_search import SearchAlgorithm
 from algorithms import IDS, IDSWithCyclePruning, AStar, GBFS, RBFS, PRBFS
-from node import Node
 from state import State
 from heuristics import *
 
@@ -32,7 +31,7 @@ class Game(object):
         goal_state = self.game_config.goal_state
 
         self.algorithm.set_goal(goal_state)
-        search_result = self.algorithm.search(start_state, goal_state)
+        search_result = self.algorithm.search(start_state)
         search_result.print_result()
 
 
