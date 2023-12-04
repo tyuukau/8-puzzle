@@ -70,7 +70,7 @@ class Node(object):
 
     def expand(self) -> List[Self]:
         children = []
-        i_old, j_old = self.state.find_blank()
+        i_old, j_old = self.state.get_blank_tile()
         action_dict = [
             (i_old - 1, j_old, Action.UP),
             (i_old + 1, j_old, Action.DOWN),
@@ -133,12 +133,12 @@ class PNode(Node):
 
     def expand(self) -> List[Self]:
         children = []
-        i_old, j_old = self.state.find_blank()
+        i_old, j_old = self.state.get_blank_tile()
         action_dict = [
-            (i_old - 1, j_old, Action.LEFT),
-            (i_old + 1, j_old, Action.RIGHT),
-            (i_old, j_old - 1, Action.UP),
-            (i_old, j_old + 1, Action.DOWN),
+            (i_old - 1, j_old, Action.UP),
+            (i_old + 1, j_old, Action.DOWN),
+            (i_old, j_old - 1, Action.LEFT),
+            (i_old, j_old + 1, Action.RIGHT),
         ]
         for i_new, j_new, action in action_dict:
             try:
