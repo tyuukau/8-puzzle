@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, List, Tuple
 import heapq
 
 from algorithms.abstract_search import Result, SearchResult, InformedSearchAlgorithm
@@ -20,7 +20,7 @@ class AStar(InformedSearchAlgorithm):
     def _search(self, start_state: State) -> SearchResult:
         start = Node(start_state)
 
-        frontier = []
+        frontier: List[Tuple[int, int, Node]] = []
         frontier.append((start.cost + self.h_cost(start), -start.cost, start))
 
         closed = set()
