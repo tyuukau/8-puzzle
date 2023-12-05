@@ -12,14 +12,12 @@ class State(object):
     - `blank (int)`: The index of the blank tile (0) in the puzzle board.
 
     Methods:
-    - `idx_to_val(self, idx: int) -> Tuple[int, int]`:
-        Converts an index in the flattened array to a (row, col) tuple.
-    - `val_to_idx(self, i: int, j: int) -> int`:
-        Converts a (row, col) tuple to an index in the flattened array.
     - `swap(self, i_old: int, j_old: int, i_new: int, j_new: int) -> State`:
-        Swaps the position of two tiles in the puzzle board and returns a new State object.
-    - `find_blank(self) -> Tuple[int, int]`:
+        Swaps the positions of two tiles in the puzzle board and returns a new State object.
+    - `get_blank_tile(self) -> Tuple[int, int]`:
         Returns the (row, col) tuple of the blank tile in the puzzle board.
+    - `get_positions(self) -> Dict[int, Tuple[int, int]]`:
+        Returns a dictionary (tile, position) in the puzzle board.
     """
 
     __slots__ = ["width", "array", "blank"]

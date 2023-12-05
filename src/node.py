@@ -1,4 +1,4 @@
-from typing import List, Optional, Self
+from typing import Iterator, Optional, Self
 from enum import Enum
 
 from state import State
@@ -72,7 +72,7 @@ class Node(object):
     def __hash__(self) -> int:
         return hash((self.state, self.parent, self.action, self.cost))
 
-    def expand(self) -> List[Self]:
+    def expand(self) -> Iterator[Self]:
         children = []
         i_old, j_old = self.state.get_blank_tile()
         action_dict = [
@@ -84,12 +84,9 @@ class Node(object):
         for i_new, j_new, action in action_dict:
             try:
                 new_state = self.state.swap(i_old, j_old, i_new, j_new)
-                children.append(
-                    Node(state=new_state, parent=self, action=action, cost=self.cost + 1)
-                )
+                yield Node(state=new_state, parent=self, action=action, cost=self.cost + 1)
             except AssertionError:
                 continue
-        return children
 
 
 class PNode(Node):
@@ -150,7 +147,7 @@ class PNode(Node):
     def __hash__(self) -> int:
         return hash((self.state, self.parent, self.action, self.cost, self.f_cost))
 
-    def expand(self) -> List[Self]:
+    def expand(self) -> Iterator[Self]:
         children = []
         i_old, j_old = self.state.get_blank_tile()
         action_dict = [
@@ -162,9 +159,6 @@ class PNode(Node):
         for i_new, j_new, action in action_dict:
             try:
                 new_state = self.state.swap(i_old, j_old, i_new, j_new)
-                children.append(
-                    PNode(state=new_state, parent=self, action=action, cost=self.cost + 1)
-                )
+                yield PNode(state=new_state, parent=self, action=action, cost=self.cost + 1)
             except AssertionError:
                 continue
-        return children

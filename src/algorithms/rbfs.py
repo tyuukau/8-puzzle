@@ -25,25 +25,28 @@ class RBFS(InformedSearchAlgorithm):
             path = self._reconstruct_path(node)
             return SearchResult(Result.SUCCESS, path, time_cp, space_cp), limit
 
-        children = node.expand()
+        # children = node.expand()
 
-        if not children:
-            return SearchResult(Result.FAILURE, None, time_cp, space_cp), 1e15
+        # if not children:
+        #     return SearchResult(Result.FAILURE, None, time_cp, space_cp), 1e15
 
-        for child in children:
+        children = []
+
+        for child in node.expand():
             self.f_cost[child] = max(child.cost + self.h_cost(child), self.f_cost[node])
             if node.parent is not None:
                 if child.state == node.parent.state:
                     self.f_cost[child] = 1e20
+            children.append(child)
 
         while True:
             children.sort(key=lambda node: self.f_cost[node])
             best = children[0]
-            alternative = children[1]
 
             if self.f_cost[best] > limit:
                 return SearchResult(Result.FAILURE, None, time_cp, space_cp), self.f_cost[best]
 
+            alternative = children[1]
             search_result, best_path = self._rbfs(
                 best, min(limit, self.f_cost[alternative]), time_cp, space_cp
             )
