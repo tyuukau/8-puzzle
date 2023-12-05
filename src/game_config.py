@@ -1,4 +1,5 @@
 from typing import Tuple
+
 from state import State
 
 
@@ -34,6 +35,16 @@ class GameConfig(object):
         return f"GameConfig(width={self.width}, start_state={self.start_state.array}, goal_state={self.goal_state.array}, solvable={self.solvable})"
 
     def _validate_data(self) -> None:
+        for state in [self.start_state, self.goal_state]:
+            if len(set(state.array)) != len(state.array):
+                raise ValueError("Each number in the state array may only appears once")
+
+            if len(state.array) != state.width**2:
+                raise ValueError("The length of the state array must be width squared")
+
+            if any(m < 0 or m > state.width**2 - 1 for m in state.array):
+                raise ValueError("All numbers in a state must be >= 0 and <= width*width-1")
+
         if not (
             (self.width == self.start_state.width) and (self.width == self.goal_state.width)
         ):

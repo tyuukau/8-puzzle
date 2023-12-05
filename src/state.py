@@ -26,7 +26,6 @@ class State(object):
         self.array = args
         self.blank = 0
         self.width = math.isqrt(len(args))
-        self._validate_data()
 
     def __repr__(self) -> str:
         return f"State{self.array}"
@@ -39,16 +38,6 @@ class State(object):
 
     def __hash__(self) -> int:
         return hash(self.array)
-
-    def _validate_data(self) -> None:
-        if len(set(self.array)) != len(self.array):
-            raise ValueError("Each number may only appears once")
-
-        if len(self.array) != self.width**2:
-            raise ValueError("The length of the array must be width squared")
-
-        if any(m < 0 or m > self.width**2 - 1 for m in self.array):
-            raise ValueError("All numbers in a state must be >= 0 and <= width*width-1")
 
     def _idx_to_pos(self, idx: int) -> Tuple[int, int]:
         return idx // self.width, idx % self.width

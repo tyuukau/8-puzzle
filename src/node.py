@@ -17,7 +17,6 @@ class Node(object):
 
     Attributes:
     - `state` (`State`): The state of the node.
-    - `parent` (`Node`): The parent node of the node.
     - `action` (`str`): The action taken to reach the node.
     - `cost` (`int`): The cost of the path from the initial state to the node.
 
@@ -26,42 +25,29 @@ class Node(object):
         Returns a list of neighbors expanded from the node.
     """
 
-    __slots__ = ["state", "parent", "action", "cost"]
+    __slots__ = ["state", "action", "cost"]
 
     def __init__(
         self,
         state: State,
-        parent: Optional[Self] = None,
         action: Optional[Action] = None,
         cost: int = 0,
     ) -> None:
         self.state = state
-        self.parent = parent
         self.action = action
         self.cost = cost
 
     def __repr__(self) -> str:
-        if self.parent is not None:
-            return f"Node(state={self.state}, parent.state={self.parent.state}, action={self.action}, cost={self.cost})"
-        else:
-            return (
-                f"Node(state={self.state}, parent=None, action={self.action}, cost={self.cost})"
-            )
+        return f"Node(state={self.state}, action={self.action}, cost={self.cost})"
 
     def __str__(self) -> str:
-        if self.parent is not None:
-            return f"Node(state={self.state}, parent.state={self.parent.state}, action={self.action}, cost={self.cost})"
-        else:
-            return (
-                f"Node(state={self.state}, parent=None, action={self.action}, cost={self.cost})"
-            )
+        return f"Node(state={self.state}, action={self.action}, cost={self.cost})"
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Node):
             return False
         return (
             self.state == other.state
-            and self.parent == other.parent
             and self.action == other.action
             and self.cost == other.cost
         )
@@ -70,7 +56,7 @@ class Node(object):
         return self.cost < other.cost
 
     def __hash__(self) -> int:
-        return hash((self.state, self.parent, self.action, self.cost))
+        return hash((self.state, self.action, self.cost))
 
     def expand(self) -> Iterator[Self]:
         i_old, j_old = self.state.get_blank_tile()
@@ -83,7 +69,7 @@ class Node(object):
         for i_new, j_new, action in action_dict:
             try:
                 new_state = self.state.swap(i_old, j_old, i_new, j_new)
-                yield Node(state=new_state, parent=self, action=action, cost=self.cost + 1)
+                yield Node(state=new_state, action=action, cost=self.cost + 1)
             except AssertionError:
                 continue
 
@@ -94,7 +80,6 @@ class PNode(Node):
 
     Attributes:
     - `state` (`State`): The state of the node.
-    - `parent` (`Node`): The parent node of the node.
     - `action` (`str`): The action taken to reach the node.
     - `cost` (`int`): The cost of the path from the initial state to the node.
     - `f_cost` (`int`): The f-cost of the node.
@@ -109,32 +94,24 @@ class PNode(Node):
     def __init__(
         self,
         state: State,
-        parent: Optional[Self] = None,
         action: Optional[Action] = None,
         cost: int = 0,
         f_cost: int = 0,
     ):
-        super().__init__(state, parent, action, cost)
+        super().__init__(state, action, cost)
         self.f_cost = f_cost
 
     def __repr__(self) -> str:
-        if self.parent is not None:
-            return f"Node(state={self.state}, parent.state={self.parent.state}, action={self.action}, cost={self.cost}, path={self.f_cost})"
-        else:
-            return f"Node(state={self.state}, parent=None, action={self.action}, cost={self.cost}, path={self.f_cost})"
+        return f"Node(state={self.state}, action={self.action}, cost={self.cost}, path={self.f_cost})"
 
     def __str__(self) -> str:
-        if self.parent is not None:
-            return f"Node(state={self.state}, parent.state={self.parent.state}, action={self.action}, cost={self.cost}, path={self.f_cost})"
-        else:
-            return f"Node(state={self.state}, parent=None, action={self.action}, cost={self.cost}, path={self.f_cost})"
+        return f"Node(state={self.state}, action={self.action}, cost={self.cost}, path={self.f_cost})"
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, PNode):
             return False
         return (
             self.state == other.state
-            and self.parent == other.parent
             and self.action == other.action
             and self.cost == other.cost
             and self.f_cost == self.f_cost
@@ -144,7 +121,7 @@ class PNode(Node):
         return self.cost < other.cost
 
     def __hash__(self) -> int:
-        return hash((self.state, self.parent, self.action, self.cost, self.f_cost))
+        return hash((self.state, self.action, self.cost, self.f_cost))
 
     def expand(self) -> Iterator[Self]:
         i_old, j_old = self.state.get_blank_tile()
@@ -157,6 +134,6 @@ class PNode(Node):
         for i_new, j_new, action in action_dict:
             try:
                 new_state = self.state.swap(i_old, j_old, i_new, j_new)
-                yield PNode(state=new_state, parent=self, action=action, cost=self.cost + 1)
+                yield PNode(state=new_state, action=action, cost=self.cost + 1)
             except AssertionError:
                 continue
