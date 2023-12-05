@@ -73,7 +73,6 @@ class Node(object):
         return hash((self.state, self.parent, self.action, self.cost))
 
     def expand(self) -> Iterator[Self]:
-        children = []
         i_old, j_old = self.state.get_blank_tile()
         action_dict = [
             (i_old - 1, j_old, Action.UP),
@@ -148,7 +147,6 @@ class PNode(Node):
         return hash((self.state, self.parent, self.action, self.cost, self.f_cost))
 
     def expand(self) -> Iterator[Self]:
-        children = []
         i_old, j_old = self.state.get_blank_tile()
         action_dict = [
             (i_old - 1, j_old, Action.UP),
