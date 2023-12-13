@@ -1,5 +1,6 @@
-from algorithms.abstract_search import Result, SearchResult, UninformedSearchAlgorithm
+from typing import List
 
+from algorithms.abstract_search import Result, SearchResult, UninformedSearchAlgorithm
 from node import Node
 from state import State
 
@@ -18,7 +19,8 @@ class IDS(UninformedSearchAlgorithm):
         self.max_depth = max_depth
 
     def _dls(self, start: Node, limit: int) -> SearchResult:
-        frontier = [(start, 0)]
+        frontier = []
+        frontier.append((start, None, 0))
 
         time_cp = 0
         space_cp = len(frontier)
@@ -26,13 +28,20 @@ class IDS(UninformedSearchAlgorithm):
         result = Result.FAILURE
 
         while frontier:
-            node, depth = frontier.pop()
+            data = frontier.pop()
+            node, _, depth = data
 
             time_cp += 1
 
             if self._is_goal(node):
                 result = Result.SUCCESS
-                path = self._reconstruct_path(node)
+
+                def _path(data):
+                    while data:
+                        yield data[0]
+                        data = data[1]
+
+                path = list(_path(data))[::-1]
                 return SearchResult(
                     result=result, path=path, time_cp=time_cp, space_cp=space_cp
                 )
@@ -41,7 +50,7 @@ class IDS(UninformedSearchAlgorithm):
                 result = Result.CUTOFF
             else:
                 for child in node.expand():
-                    frontier.append((child, depth + 1))
+                    frontier.append((child, data, depth + 1))
 
                     time_cp += 1
                     space_cp = max(len(frontier), space_cp)
@@ -72,40 +81,49 @@ class IDSWithCyclePruning(UninformedSearchAlgorithm):
         self.max_depth = max_depth
 
     def _dls(self, start: Node, limit: int) -> SearchResult:
-        frontier = [start]
+        frontier = []
+        frontier.append((start, None, 0))
 
-        expanded = []
+        expanded = set()
 
         time_cp = 0
-        space_cp = len(frontier)
+        space_cp = len(frontier) + len(expanded)
 
         result = Result.FAILURE
 
         while frontier:
-            node = frontier.pop()
+            data = frontier.pop()
+            node, _, depth = data
 
-            if node in expanded:  # Skip nodes that we have already visited
+            if node.state in expanded:
                 continue
 
-            expanded.append(node)
+            expanded.add(node.state)
 
             time_cp += 1
 
             if self._is_goal(node):
                 result = Result.SUCCESS
-                path = self._reconstruct_path(node)
+
+                def _path(data):
+                    while data:
+                        yield data[0]
+                        data = data[1]
+
+                path = list(_path(data))[::-1]
                 return SearchResult(
                     result=result, path=path, time_cp=time_cp, space_cp=space_cp
                 )
-            if node.cost > limit:
+
+            if depth > limit:
                 result = Result.CUTOFF
             else:
                 for child in node.expand():
-                    if child not in expanded:
-                        frontier.append(child)
+                    if child.state not in expanded:
+                        frontier.append((child, data, depth + 1))
 
                         time_cp += 1
-                        space_cp = max(len(frontier), space_cp)
+                        space_cp = max(len(frontier) + len(expanded), space_cp)
 
         return SearchResult(result=result, path=None, time_cp=time_cp, space_cp=space_cp)
 

@@ -1,4 +1,5 @@
 from typing import Tuple, Callable
+
 from algorithms.abstract_search import Result, SearchResult, InformedSearchAlgorithm
 from node import Node, PNode
 from state import State

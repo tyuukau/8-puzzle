@@ -1,4 +1,4 @@
-from typing import Callable, List, Tuple
+from typing import Callable
 import heapq
 
 from algorithms.abstract_search import Result, SearchResult, InformedSearchAlgorithm
@@ -20,8 +20,8 @@ class AStar(InformedSearchAlgorithm):
     def _search(self, start_state: State) -> SearchResult:
         start = Node(start_state)
 
-        frontier: List[Tuple[int, int, Node]] = []
-        frontier.append((start.cost + self.h_cost(start), -start.cost, start))
+        frontier = []
+        frontier.append((start.cost + self.h_cost(start), -start.cost, start, None))
 
         closed = set()
 
@@ -29,14 +29,23 @@ class AStar(InformedSearchAlgorithm):
         space_cp = len(closed) + len(frontier)
 
         while frontier:
-            node = heapq.heappop(frontier)[2]
+            data = heapq.heappop(frontier)
+            node = data[2]
+
             closed.add(node.state)
 
             time_cp += 1
             space_cp = max(space_cp, len(closed) + len(frontier))
 
             if self._is_goal(node):
-                path = self._reconstruct_path(node)
+
+                def _path(data):
+                    while data:
+                        yield data[2]
+                        data = data[3]
+
+                path = list(_path(data))[::-1]
+                # path = self._reconstruct_path(node)
                 return SearchResult(
                     result=Result.SUCCESS, path=path, time_cp=time_cp, space_cp=space_cp
                 )
@@ -45,11 +54,7 @@ class AStar(InformedSearchAlgorithm):
                 if child.state not in closed:
                     heapq.heappush(
                         frontier,
-                        (
-                            child.cost + self.h_cost(child),
-                            -child.cost,
-                            child,
-                        ),
+                        (child.cost + self.h_cost(child), -child.cost, child, data),
                     )
                     time_cp += 1
             space_cp = max(space_cp, len(closed) + len(frontier))
