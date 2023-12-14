@@ -1,4 +1,4 @@
-from typing import Callable, List, Tuple
+from typing import Callable, Set
 from queue import PriorityQueue
 
 from algorithms.abstract_search import Result, SearchResult, InformedSearchAlgorithm
@@ -21,10 +21,10 @@ class GBFS(InformedSearchAlgorithm):
         start = PNode(start_state)
         start.f_cost = self.h_cost(start)
 
-        frontier = PriorityQueue()
+        frontier: PriorityQueue[PNode] = PriorityQueue()
         frontier.put(start)
 
-        closed = set()
+        closed: Set[State] = set()
 
         time_cp = 0
         space_cp = len(closed) + frontier.qsize()
