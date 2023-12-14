@@ -100,7 +100,7 @@ class PNode(Node):
     - `f_cost` (`int`): The f-cost of the node.
 
     Methods:
-    - `expand() -> List[Node]`:
+    - `expand() -> Iterator[Node]`:
         Returns a list of neighbors expanded from the node.
     """
 
@@ -141,7 +141,12 @@ class PNode(Node):
         )
 
     def __lt__(self, other) -> bool:
-        return self.cost < other.cost
+        if self.f_cost < other.f_cost:
+            return True
+        elif self.f_cost == other.f_cost:
+            if self.cost > other.cost:
+                return True
+        return False
 
     def __hash__(self) -> int:
         return hash((self.state, self.parent, self.action, self.cost, self.f_cost))
