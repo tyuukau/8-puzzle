@@ -3,7 +3,7 @@ from sys import exit
 
 from game_config import GameConfig
 from algorithms.abstract_search import SearchAlgorithm
-from algorithms import AStar, GBFS, RBFS, PRBFS
+from algorithms import AStar, GBFS, RBFS
 from state import State
 from heuristics import *
 
@@ -84,7 +84,7 @@ def main():
         start_state=State(8, 6, 7, 2, 5, 4, 3, 0, 1),
         goal_state=State(1, 2, 3, 4, 5, 6, 7, 8, 0),
     )
-    algorithm = PRBFS(heuristic=manhattan_distance)
+    algorithm = RBFS(heuristic=manhattan_distance)
     g = Game(game_config=game_config, algorithm=algorithm, ignore_solvability=True)
     g.play()
 
