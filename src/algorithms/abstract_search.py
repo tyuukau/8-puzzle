@@ -3,8 +3,8 @@ from enum import Enum
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
-from node import Node
-from state import State
+from ..node import Node
+from ..state import State
 
 
 class Result(Enum):

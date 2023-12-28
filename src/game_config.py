@@ -1,5 +1,6 @@
 from typing import Tuple
-from state import State
+
+from .state import State
 
 
 class GameConfig(object):

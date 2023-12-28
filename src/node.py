@@ -1,7 +1,7 @@
 from typing import Iterator, Optional, Self
 from enum import Enum
 
-from state import State
+from .state import State
 
 
 class Action(Enum):
@@ -41,7 +41,7 @@ class Node(object):
         self.cost = cost
 
     def __repr__(self) -> str:
-        if self.parent is not None:
+        if self.ư is not None:
             return f"Node(state={self.state}, parent.state={self.parent.state}, action={self.action}, cost={self.cost})"
         else:
             return (

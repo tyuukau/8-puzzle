@@ -1,9 +1,9 @@
 from typing import Callable, Set
 from queue import PriorityQueue
 
-from algorithms.abstract_search import Result, SearchResult, InformedSearchAlgorithm
-from node import PNode
-from state import State
+from ..algorithms.abstract_search import Result, SearchResult, InformedSearchAlgorithm
+from ..node import PNode
+from ..state import State
 
 
 class AStar(InformedSearchAlgorithm):

@@ -1,9 +1,8 @@
 from typing import Tuple, Callable
-from queue import PriorityQueue
 
-from algorithms.abstract_search import Result, SearchResult, InformedSearchAlgorithm
-from node import Node, PNode
-from state import State
+from ..algorithms.abstract_search import Result, SearchResult, InformedSearchAlgorithm
+from ..node import PNode
+from ..state import State
 
 
 class RBFS(InformedSearchAlgorithm):

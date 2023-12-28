@@ -1,4 +1,4 @@
-from state import State
+from .state import State
 
 
 def mistile_distance(current_state: State, goal_state: State) -> int:
@@ -12,7 +12,7 @@ def mistile_distance(current_state: State, goal_state: State) -> int:
     Returns:
     - `int`: The Manhattan distance between the current state and the goal state.
     """
-    return sum(c1 != c2 for c1, c2 in zip(current_state.array, goal_state.array))
+    return sum(c1 != c2 and c1 != 0 for c1, c2 in zip(current_state.array, goal_state.array))
 
 
 def manhattan_distance(current_state: State, goal_state: State) -> int:
@@ -70,8 +70,9 @@ def gaschnig_distance(current_state: State, goal_state: State) -> int:
 
 
 def main():
-    a = State(1, 2, 3, 4, 0, 6, 7, 5, 8)
-    b = State(1, 2, 3, 4, 5, 6, 7, 8, 0)
+    a = State(15, 14, 8, 12, 10, 11, 9, 13, 2, 6, 5, 1, 3, 7, 4, 0)
+    b = State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0)
+    normal_state = State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0)
     print(mistile_distance(a, b))
     print(manhattan_distance(a, b))
     print(gaschnig_distance(a, b))
