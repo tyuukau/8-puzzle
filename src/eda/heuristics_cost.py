@@ -1,0 +1,80 @@
+import pandas as pd
+from tqdm import tqdm
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+from ..heuristics import manhattan_distance, mistile_distance
+from ..state import State
+
+
+normal_state = State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0)
+
+
+def _calculate_manhattan(row) -> int:
+    state_values = row[0:16].tolist()  # Extract values from columns 0 to 15
+    state = State(*state_values)
+    manhattan_estimation = manhattan_distance(state, normal_state)
+    return manhattan_estimation
+
+
+def _calculate_mistile(row) -> int:
+    state_values = row[0:16].tolist()  # Extract values from columns 0 to 15
+    state = State(*state_values)
+    mistile_estimation = mistile_distance(state, normal_state)
+    return mistile_estimation
+
+
+def evaluate_heuristics_on_dataset(
+    input_file_path: str, evaluated_folder_path: str, n: int = 0
+) -> None:
+    tqdm.pandas()
+
+    file_path = input_file_path
+
+    if n > 0:
+        df = pd.read_csv(file_path, nrows=n)
+    else:
+        df = pd.read_csv(file_path)
+
+    df = df.drop_duplicates()
+
+    df["manhattan_estimation"] = df.progress_apply(_calculate_manhattan, axis=1)
+    df["mistile_estimation"] = df.progress_apply(_calculate_mistile, axis=1)
+
+    df.drop(columns=list(str(i) for i in range(16)), inplace=True)
+
+    # Assuming df contains 'cost' and 'manhattan_estimation' columns
+    # Calculate residuals
+    df["manhattan_residual"] = df["manhattan_estimation"] - df["cost"]
+    df["mistile_residual"] = df["mistile_estimation"] - df["cost"]
+
+    output_file = evaluated_folder_path + "estimations.csv"
+    df.to_csv(output_file)
+
+    # Create a residual plot
+    plt.rcParams["font.family"] = "SF Compact Text"
+    font_scale = 2
+    sns.set(font_scale=font_scale, font="SF Compact Text")
+
+    # Example for the first plot
+    print("Creating residual plot for Manhattan distance")
+    plt.figure(figsize=(8, 6))
+    sns.scatterplot(data=df, x="cost", y="manhattan_residual", alpha=0.7)
+    plt.axhline(y=0, color="red", linestyle="--")
+    plt.xlabel("Cost")
+    plt.ylabel("Residuals")
+    plt.tight_layout()
+    plt.savefig(evaluated_folder_path + "manhattan_residual_plot.png")
+
+    # Example for the second plot
+    print("Creating residual plot for Misplaced Tile distance")
+    plt.figure(figsize=(8, 6))
+    sns.scatterplot(data=df, x="cost", y="mistile_residual", alpha=0.7)
+    plt.axhline(y=0, color="red", linestyle="--")
+    plt.xlabel("Cost")
+    plt.ylabel("Residuals")
+    plt.tight_layout()
+    plt.savefig(evaluated_folder_path + "mistile_residual_plot.png")
+
+    print("Done.")
