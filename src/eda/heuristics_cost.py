@@ -1,10 +1,7 @@
 import pandas as pd
 from tqdm import tqdm
-import matplotlib.pyplot as plt
-import seaborn as sns
 
-from ..utils import make_dir
-
+from ..utils import create_scatterplot_and_save, make_dir
 from ..heuristics import manhattan_distance, mistile_distance
 from ..state import State
 
@@ -56,28 +53,18 @@ def evaluate_heuristics_on_dataset(
     df.to_csv(output_file)
 
     # Create a residual plot
-    plt.rcParams["font.family"] = "SF Compact Text"
-    font_scale = 2
-    sns.set(font_scale=font_scale, font="SF Compact Text")
+    create_scatterplot_and_save(
+        df=df,
+        x="cost",
+        y="manhattan_residual",
+        file_path=evaluated_folder_path + "manhattan_residual_plot.png",
+    )
 
-    # Example for the first plot
-    print("Creating residual plot for Manhattan distance")
-    plt.figure(figsize=(8, 6))
-    sns.scatterplot(data=df, x="cost", y="manhattan_residual", alpha=0.7)
-    plt.axhline(y=0, color="red", linestyle="--")
-    plt.xlabel("Cost")
-    plt.ylabel("Residuals")
-    plt.tight_layout()
-    plt.savefig(evaluated_folder_path + "manhattan_residual_plot.png")
-
-    # Example for the second plot
-    print("Creating residual plot for Misplaced Tile distance")
-    plt.figure(figsize=(8, 6))
-    sns.scatterplot(data=df, x="cost", y="mistile_residual", alpha=0.7)
-    plt.axhline(y=0, color="red", linestyle="--")
-    plt.xlabel("Cost")
-    plt.ylabel("Residuals")
-    plt.tight_layout()
-    plt.savefig(evaluated_folder_path + "mistile_residual_plot.png")
+    create_scatterplot_and_save(
+        df=df,
+        x="cost",
+        y="mistile_residual",
+        file_path=evaluated_folder_path + "mistile_residual_plot.png",
+    )
 
     print("Done.")
