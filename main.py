@@ -7,7 +7,7 @@ from src.game_config import GameConfig
 from src.game import Game
 from src.heuristics import manhattan_distance, ann_distance
 from src.ml import train
-from src.experiments import conduct_overestimation_experiment
+from src.experiments import conduct_overestimation_experiment, make_exp_dataset
 
 
 def main():
@@ -25,6 +25,12 @@ def main():
         "--train",
         action="store_true",
         help="Train a model for calculating puzzle cost.",
+    )
+
+    tasks.add_argument(
+        "--make_exp_dataset",
+        action="store_true",
+        help="Make an experimental dataset for Experiment 2.",
     )
 
     tasks.add_argument(
@@ -118,6 +124,9 @@ def main():
             run_name=args.run_name,
             should_stratify=args.should_stratify,
         )
+
+    if args.make_exp_dataset:
+        make_exp_dataset()
 
     if args.exp1:
         conduct_overestimation_experiment(
