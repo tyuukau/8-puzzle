@@ -1,5 +1,6 @@
 import random
 from sys import exit
+import time
 
 from .game_config import GameConfig
 from .algorithms.abstract_search import SearchAlgorithm
@@ -40,7 +41,12 @@ class Game(object):
                 exit("Solvability is False. Game terminated.")
         else:
             print("Ignoring solvability...")
+
+        start_time = time.time()
+        end_time = time.time()
         self.algorithm.solve(start_state, goal_state)
+        execution_time = end_time - start_time
+        print(f"Execution time: {execution_time:.4f} seconds")
 
 
 def game_generator(n: int = 3) -> GameConfig:

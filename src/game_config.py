@@ -56,8 +56,8 @@ class GameConfig(object):
         start_inversions = self._count_inversions(self.start_state.array)
         goal_inversions = self._count_inversions(self.goal_state.array)
         if self.width % 2 == 0:
-            goal_zero_row_index = self.goal_state.index(0) // self.width
-            start_zero_row_index = self.start_state.index(0) // self.width
+            goal_zero_row_index = self.goal_state.array.index(0) // self.width
+            start_zero_row_index = self.start_state.array.index(0) // self.width
             return (goal_inversions % 2) == (
                 (start_inversions + goal_zero_row_index + start_zero_row_index) % 2
             )

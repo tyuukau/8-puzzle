@@ -1,12 +1,11 @@
 import argparse
-import time
 
 from src.eda import evaluate_heuristics_on_dataset
 from src.algorithms import AStar
 from src.state import State
 from src.game_config import GameConfig
 from src.game import Game
-from src.heuristics import manhattan_distance
+from src.heuristics import manhattan_distance, ann_distance
 from src.ml import train
 from src.experiments import conduct_overestimation_experiment
 
@@ -38,6 +37,12 @@ def main():
         "--exp2",
         action="store_true",
         help="Conduct the second experiment.",
+    )
+
+    tasks.add_argument(
+        "--game",
+        action="store_true",
+        help="Play a game.",
     )
 
     parser.add_argument(
@@ -88,6 +93,14 @@ def main():
         help="Split the data in a stratified manner.",
     )
 
+    parser.add_argument(
+        "--board",
+        nargs=16,
+        type=int,
+        default=[12, 0, 15, 2, 8, 4, 3, 5, 6, 14, 1, 11, 10, 7, 9, 13],
+        help="A list of 16 integers from 0 to 15, shuffled.",
+    )
+
     args = parser.parse_args()
 
     if args.evaluate_heuristics_on_dataset:
@@ -116,19 +129,18 @@ def main():
     if args.exp2:
         pass
 
-    # game_config = GameConfig(
-    #     start_state=State(12, 0, 15, 2, 8, 4, 3, 5, 6, 14, 1, 11, 10, 7, 9, 13),
-    #     goal_state=State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0),
-    # )
-    # algorithm = AStar(heuristic=manhattan_distance)
-    # g = Game(game_config=game_config, algorithm=algorithm, ignore_solvability=True)
+    if args.game:
+        start_board = args.board
 
-    # start_time = time.time()  # Record the start time
-    # g.play()  # Execute the function or code block you want to measure
-    # end_time = time.time()  # Record the end time
+        game_config = GameConfig(
+            # start_state=State(12, 0, 15, 2, 8, 4, 3, 5, 6, 14, 1, 11, 10, 7, 9, 13),
+            start_state=State(*start_board),
+            goal_state=State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0),
+        )
+        algorithm = AStar(heuristic=manhattan_distance)
+        g = Game(game_config=game_config, algorithm=algorithm, ignore_solvability=False)
 
-    # execution_time = end_time - start_time  # Calculate the elapsed time
-    # print(f"Execution time: {execution_time:.4f} seconds")
+        g.play()
 
 
 if __name__ == "__main__":
