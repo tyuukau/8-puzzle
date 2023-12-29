@@ -24,13 +24,14 @@ class PuzzleHeuristicModel(nn.Module):
         return x
 
 
-def get_model(device: device) -> nn.Module:
+def get_model(model_path: str = "data/models/puzzle_model.pth") -> nn.Module:
     input_size = 256
     hidden_sizes = [1024, 1024, 512, 128, 64]
     model = PuzzleHeuristicModel(input_size, hidden_sizes)
 
-    checkpoint_path = "data/models/run5/immediate/best_puzzle_model.pth"
-    checkpoint = torch.load(checkpoint_path, map_location=torch.device("cpu"))
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    checkpoint = torch.load(model_path, map_location=torch.device("cpu"))
 
     if "module." in list(checkpoint.keys())[0]:
         new_state_dict = {}

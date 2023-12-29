@@ -12,6 +12,8 @@ import os
 import logging
 from tqdm import tqdm
 
+from ..utils import make_dir
+
 
 class PuzzleDataset(Dataset):
     def __init__(self, data):
@@ -47,15 +49,10 @@ class PuzzleHeuristicModel(nn.Module):
 def train(
     input_file_path: str, save_model_dir: str, run_name: str, n: int, should_stratify: bool
 ):
-    print("Starting training...")
-
     working_dir = save_model_dir + run_name
+    make_dir(working_dir)
 
-    if not os.path.exists(working_dir):
-        os.makedirs(working_dir)
-        print(f"Directory created at: {working_dir}")
-    else:
-        print(f"Directory already exists at: {working_dir}")
+    print("Starting training...")
 
     log_file = f"{working_dir}/logs.txt"
     if os.path.exists(log_file):
