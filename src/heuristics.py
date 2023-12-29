@@ -69,6 +69,10 @@ def gaschnig_distance(current_state: State, goal_state: State) -> int:
     return move
 
 
+def ann_distance(current_state: State, goal_state: State) -> int:
+    return 0
+
+
 def main():
     a = State(15, 14, 8, 12, 10, 11, 9, 13, 2, 6, 5, 1, 3, 7, 4, 0)
     b = State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0)
