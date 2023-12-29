@@ -65,4 +65,4 @@ def make_exp_dataset():
     ]
     result_df = result_df.astype(int)
 
-    result_df.to_csv("data/input/experimental_data.csv")
+    result_df.to_csv("data/input/experimental_data.csv", index=False)

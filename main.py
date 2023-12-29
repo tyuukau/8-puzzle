@@ -7,7 +7,11 @@ from src.game_config import GameConfig
 from src.game import Game
 from src.heuristics import manhattan_distance, ann_distance
 from src.ml import train
-from src.experiments import conduct_overestimation_experiment, make_exp_dataset
+from src.experiments import (
+    conduct_overestimation_experiment,
+    make_exp_dataset,
+    conduct_algorithm_experiment,
+)
 
 
 def main():
@@ -56,6 +60,13 @@ def main():
         type=str,
         default="data/input/fifteen-puzzle-6M.csv",
         help="Path to the input file.",
+    )
+
+    parser.add_argument(
+        "--exp_file_path",
+        type=str,
+        default="data/input/experimental_data.csv",
+        help="Path to the experiment data file.",
     )
 
     parser.add_argument(
@@ -136,7 +147,11 @@ def main():
         )
 
     if args.exp2:
-        pass
+        conduct_algorithm_experiment(
+            experiment_data_path=args.exp_file_path,
+            experiment_folder_path=args.exp_folder_dir,
+            n=args.n,
+        )
 
     if args.game:
         start_board = args.board
@@ -146,7 +161,7 @@ def main():
             start_state=State(*start_board),
             goal_state=State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0),
         )
-        algorithm = AStar(heuristic=manhattan_distance)
+        algorithm = AStar(heuristic=ann_distance)
         g = Game(game_config=game_config, algorithm=algorithm, ignore_solvability=False)
 
         g.play()

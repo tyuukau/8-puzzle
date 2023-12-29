@@ -78,11 +78,12 @@ class SearchAlgorithm(ABC):
     def _search(self, start_state: State) -> SearchResult:
         ...
 
-    def solve(self, start_state: State, goal_state: State, print: bool = True) -> None:
+    def solve(self, start_state: State, goal_state: State, print: bool = False) -> SearchResult:
         self._set_goal(goal_state)
         search_result = self._search(start_state)
         if print:
             search_result.print_result()
+        return search_result
 
 
 class UninformedSearchAlgorithm(SearchAlgorithm):

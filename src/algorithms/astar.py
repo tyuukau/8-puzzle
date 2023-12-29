@@ -1,6 +1,7 @@
-from typing import Callable, Set
+from typing import Set
 from queue import PriorityQueue
 
+from ..heuristics import CallableHeuristicClass
 from ..algorithms.abstract_search import Result, SearchResult, InformedSearchAlgorithm
 from ..node import PNode
 from ..state import State
@@ -11,10 +12,10 @@ class AStar(InformedSearchAlgorithm):
     A* search algorithm implementation.
 
     Args:
-    - `heuristic` (`Callable[[State, State], int]`): The heuristic function.
+    - `heuristic` (`CallableHeuristicClass`): The heuristic function.
     """
 
-    def __init__(self, heuristic: Callable[[State, State], int]) -> None:
+    def __init__(self, heuristic: CallableHeuristicClass) -> None:
         super().__init__(heuristic)
 
     def _search(self, start_state: State) -> SearchResult:
