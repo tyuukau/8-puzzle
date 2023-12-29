@@ -3,6 +3,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from ..utils import make_dir
 
 from ..heuristics import manhattan_distance, mistile_distance
 from ..state import State
@@ -28,6 +29,8 @@ def _calculate_mistile(row) -> int:
 def evaluate_heuristics_on_dataset(
     input_file_path: str, evaluated_folder_path: str, n: int = 0
 ) -> None:
+    make_dir(evaluated_folder_path)
+
     tqdm.pandas()
 
     file_path = input_file_path

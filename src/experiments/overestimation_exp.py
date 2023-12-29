@@ -4,23 +4,24 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from ..utils import make_dir
+
 from ..ml import get_model, batch_infer
 
 
 def conduct_overestimation_experiment(
     input_file_path: str, experiment_folder_path: str, n: int = 0
 ) -> None:
-    file_path = input_file_path
+    make_dir(experiment_folder_path)
 
     if n > 0:
-        df = pd.read_csv(file_path, nrows=n)
+        df = pd.read_csv(input_file_path, nrows=n)
     else:
-        df = pd.read_csv(file_path)
+        df = pd.read_csv(input_file_path)
 
     df = df.drop_duplicates()
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = get_model(device)
+    model = get_model()
 
     predicted_costs = batch_infer(df, model)
     df["predicted_cost"] = predicted_costs
