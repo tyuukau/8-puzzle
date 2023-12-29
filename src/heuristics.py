@@ -1,5 +1,7 @@
 from .state import State
 
+from .ml import get_model, infer
+
 
 def mistile_distance(current_state: State, goal_state: State) -> int:
     """
@@ -69,17 +71,24 @@ def gaschnig_distance(current_state: State, goal_state: State) -> int:
     return move
 
 
-def ann_distance(current_state: State, goal_state: State) -> int:
-    return 0
+class AnnDistance:
+    def __init__(self, model_path: str = "data/models/puzzle_model.pth") -> None:
+        self.model = get_model(model_path)
+
+    def __call__(self, current_state: State, end_state: State) -> int:
+        return infer(list(current_state.array), self.model)
+
+
+ann_distance = AnnDistance()
 
 
 def main():
     a = State(15, 14, 8, 12, 10, 11, 9, 13, 2, 6, 5, 1, 3, 7, 4, 0)
     b = State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0)
-    normal_state = State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0)
     print(mistile_distance(a, b))
     print(manhattan_distance(a, b))
     print(gaschnig_distance(a, b))
+    print(ann_distance(a, b))
 
 
 if __name__ == "__main__":
