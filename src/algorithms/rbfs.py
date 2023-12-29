@@ -1,5 +1,6 @@
-from typing import Tuple, Callable
+from typing import Tuple
 
+from ..heuristics import CallableHeuristicClass
 from ..algorithms.abstract_search import Result, SearchResult, InformedSearchAlgorithm
 from ..node import PNode
 from ..state import State
@@ -10,11 +11,11 @@ class RBFS(InformedSearchAlgorithm):
     Recursive Best First Search (RBFS) algorithm implementation.
 
     Args:
-    - `heuristic` (`Callable[[State, State], int]`): The heuristic function.
+    - `heuristic` (`CallableHeuristicClass`): The heuristic function.
     - `limit` (`int`): Limit for the f_cost of nodes.
     """
 
-    def __init__(self, heuristic: Callable[[State, State], int], limit: int = 1e15) -> None:
+    def __init__(self, heuristic: CallableHeuristicClass, limit: int = 1e15) -> None:
         super().__init__(heuristic)
         self.limit = limit
 

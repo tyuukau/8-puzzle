@@ -3,21 +3,29 @@ from .state import State
 from .ml import get_model, infer
 
 
-def mistile_distance(current_state: State, goal_state: State) -> int:
+class CallableHeuristicClass:
+    ...
+
+
+class MistileDistance(CallableHeuristicClass):
     """
-    Calculates the misplaced-tile distance between the current state and the goal state.
+    Calculates the Misplaced-tile distance between the current state and the goal state.
 
     Args:
     - `current_state` (`State`): The current state of the puzzle.
     - `goal_state` (`State`): The goal state of the puzzle.
 
     Returns:
-    - `int`: The Manhattan distance between the current state and the goal state.
+    - `int`: The Misplaced-tile distance between the current state and the goal state.
     """
-    return sum(c1 != c2 and c1 != 0 for c1, c2 in zip(current_state.array, goal_state.array))
+
+    def __call__(self, current_state: State, goal_state: State) -> int:
+        return sum(
+            c1 != c2 and c1 != 0 for c1, c2 in zip(current_state.array, goal_state.array)
+        )
 
 
-def manhattan_distance(current_state: State, goal_state: State) -> int:
+class ManhattanDistance(CallableHeuristicClass):
     """
     Calculates the Manhattan distance between the current state and the goal state.
 
@@ -28,17 +36,19 @@ def manhattan_distance(current_state: State, goal_state: State) -> int:
     Returns:
     - `int`: The Manhattan distance between the current state and the goal state.
     """
-    goal_pos = goal_state.get_positions()
 
-    sum = 0
-    for cell, (current_i, current_j) in current_state.get_positions().items():
-        if cell != 0:
-            goal_i, goal_j = goal_pos[cell]
-            sum += abs(current_i - goal_i) + abs(current_j - goal_j)
-    return sum
+    def __call__(self, current_state: State, goal_state: State) -> int:
+        goal_pos = goal_state.get_positions()
+
+        sum = 0
+        for cell, (current_i, current_j) in current_state.get_positions().items():
+            if cell != 0:
+                goal_i, goal_j = goal_pos[cell]
+                sum += abs(current_i - goal_i) + abs(current_j - goal_j)
+        return sum
 
 
-def gaschnig_distance(current_state: State, goal_state: State) -> int:
+class GaschnigDistance(CallableHeuristicClass):
     """
     Calculates the Gaschnig distance between the current state and the goal state.
 
@@ -47,38 +57,54 @@ def gaschnig_distance(current_state: State, goal_state: State) -> int:
     - `goal_state` (`State`): The goal state of the puzzle.
 
     Returns:
-    - `int`: The Manhattan distance between the current state and the goal state.
+    - `int`: The Gaschnig distance between the current state and the goal state.
 
     See here: https://cse-robotics.engr.tamu.edu/dshell/cs625/gaschnig-note.pdf.
     """
-    start = list(current_state.array)
-    goal = list(goal_state.array)
-    move = 0
-    while start != goal:
-        blank_index = start.index(0)
-        if goal[blank_index] != 0:
-            mismatch_index = start.index(goal[blank_index])
-            start[blank_index] = goal[blank_index]
-            start[mismatch_index] = 0
-            move += 1
-        else:  # blank in goal position
-            for i in range(len(start)):
-                if start[i] != goal[i]:
-                    start[blank_index] = start[i]
-                    start[i] = 0
-                    move += 1
-                    break
-    return move
+
+    def __call__(self, current_state: State, goal_state: State) -> int:
+        start = list(current_state.array)
+        goal = list(goal_state.array)
+        move = 0
+        while start != goal:
+            blank_index = start.index(0)
+            if goal[blank_index] != 0:
+                mismatch_index = start.index(goal[blank_index])
+                start[blank_index] = goal[blank_index]
+                start[mismatch_index] = 0
+                move += 1
+            else:  # blank in goal position
+                for i in range(len(start)):
+                    if start[i] != goal[i]:
+                        start[blank_index] = start[i]
+                        start[i] = 0
+                        move += 1
+                        break
+        return move
 
 
-class AnnDistance:
+class AnnDistance(CallableHeuristicClass):
+    """
+    Calculates the Misplaced-tile distance between the current state and the goal state.
+
+    Args:
+    - `current_state` (`State`): The current state of the puzzle.
+    - `goal_state` (`State`): The goal state of the puzzle.
+
+    Returns:
+    - `int`: The Misplaced-tile distance between the current state and the goal state.
+    """
+
     def __init__(self, model_path: str = "data/models/puzzle_model.pth") -> None:
         self.model = get_model(model_path)
 
-    def __call__(self, current_state: State, end_state: State) -> int:
+    def __call__(self, current_state: State, goal_state: State) -> int:
         return infer(list(current_state.array), self.model)
 
 
+mistile_distance = MistileDistance()
+manhattan_distance = ManhattanDistance()
+gaschnig_distance = GaschnigDistance()
 ann_distance = AnnDistance()
 
 

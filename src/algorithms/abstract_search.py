@@ -1,7 +1,9 @@
-from typing import List, Callable, Union
+from typing import List, Union
 from enum import Enum
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
+
+from ..heuristics import CallableHeuristicClass
 
 from ..node import Node
 from ..state import State
@@ -105,10 +107,10 @@ class InformedSearchAlgorithm(SearchAlgorithm):
     specific search algorithm.
 
     Attributes:
-    - `heuristic` (`Callable[[State, State], int]`): The heuristic function.
+    - `heuristic` (`CallableHeuristicClass`): The heuristic function.
     """
 
-    def __init__(self, heuristic: Callable[[State, State], int]) -> None:
+    def __init__(self, heuristic: CallableHeuristicClass) -> None:
         super().__init__()
         self.heuristic = heuristic
 
