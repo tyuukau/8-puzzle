@@ -61,6 +61,9 @@ python main.py --evaluate_heuristics_on_dataset
 python main.py --train --run_name run0 --should_stratify
 ```
 
+After you run the training, you may want to copy the `.pth` file from `data/models/[YOUR_RUN_NAME]/immediate/` folder to `data/models/`.
+Experiments may fail if you do not do this.
+
 `--make_exp_dataset`:
 
 ```bash
@@ -84,3 +87,5 @@ python main.py --exp2
 ```bash
 python main.py --game --board 1 2 3 4 5 6 7 8 9 10 11 12 13 14 0 15
 ```
+
+Sometimes, some variables are not exposed through this user interface. You may want to change them in the code files.
