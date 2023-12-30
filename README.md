@@ -63,6 +63,7 @@ python main.py --train --run_name run0 --should_stratify
 
 After you run the training, you may want to copy the `.pth` file from `data/models/[YOUR_RUN_NAME]/immediate/` folder to `data/models/`.
 Experiments may fail if you do not do this.
+We have provided a sample trained model weights `puzzle_model.pth` at `data/input/`. Copy to `data/models/`.
 
 `--make_exp_dataset`:
 
