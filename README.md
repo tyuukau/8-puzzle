@@ -47,12 +47,12 @@ options:
                         A list of 16 integers from 0 to 15, shuffled.
 ```
 
-Recommended runs:
+Suggested runs:
 
 `--evaluate_heuristics_on_dataset`:
 
 ```bash
-python main.py --evaluate_heuristics_on_dataset [--n 100]
+python main.py --evaluate_heuristics_on_dataset
 ```
 
 `--train`:
