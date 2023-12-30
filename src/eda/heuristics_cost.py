@@ -24,9 +24,9 @@ def _calculate_mistile(row) -> int:
 
 
 def evaluate_heuristics_on_dataset(
-    input_file_path: str, evaluated_folder_path: str, n: int = 0
+    input_file_path: str, eda_folder_dir: str, n: int = 0
 ) -> None:
-    make_dir(evaluated_folder_path)
+    make_dir(eda_folder_dir)
 
     tqdm.pandas()
 
@@ -49,7 +49,7 @@ def evaluate_heuristics_on_dataset(
     df["manhattan_residual"] = df["manhattan_estimation"] - df["cost"]
     df["mistile_residual"] = df["mistile_estimation"] - df["cost"]
 
-    output_file = evaluated_folder_path + "estimations.csv"
+    output_file = eda_folder_dir + "estimations.csv"
     df.to_csv(output_file)
 
     # Create a residual plot
@@ -57,14 +57,14 @@ def evaluate_heuristics_on_dataset(
         df=df,
         x="cost",
         y="manhattan_residual",
-        file_path=evaluated_folder_path + "manhattan_residual_plot.png",
+        file_path=eda_folder_dir + "manhattan_residual_plot.png",
     )
 
     create_scatterplot_and_save(
         df=df,
         x="cost",
         y="mistile_residual",
-        file_path=evaluated_folder_path + "mistile_residual_plot.png",
+        file_path=eda_folder_dir + "mistile_residual_plot.png",
     )
 
     print("Done.")

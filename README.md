@@ -46,3 +46,41 @@ options:
   --board BOARD BOARD BOARD BOARD BOARD BOARD BOARD BOARD BOARD BOARD BOARD BOARD BOARD BOARD BOARD BOARD
                         A list of 16 integers from 0 to 15, shuffled.
 ```
+
+Recommended runs:
+
+`--evaluate_heuristics_on_dataset`:
+
+```bash
+python main.py --evaluate_heuristics_on_dataset [--n 100]
+```
+
+`--train`:
+
+```bash
+python main.py --train --run_name run0 --should_stratify
+```
+
+`--make_exp_dataset`:
+
+```bash
+python main.py --make_exp_dataset 
+```
+
+`--exp1`:
+
+```bash
+python main.py --exp1
+```
+
+`--exp2`:
+
+```bash
+python main.py --exp2
+```
+
+`--game`:
+
+```bash
+python main.py --game --board 1 2 3 4 5 6 7 8 9 10 11 12 13 14 0 15
+```

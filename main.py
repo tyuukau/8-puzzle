@@ -123,7 +123,7 @@ def main():
     if args.evaluate_heuristics_on_dataset:
         evaluate_heuristics_on_dataset(
             input_file_path=args.input_file_path,
-            evaluated_folder_path=args.eda_folder_dir,
+            eda_folder_dir=args.eda_folder_dir,
             n=args.n,
         )
 
