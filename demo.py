@@ -1,16 +1,18 @@
-from typing import List
+from typing import List, Union
 import streamlit as st
 
 import threading
+import time
 import pandas as pd
 import random
 
 from src.algorithms.abstract_search import InformedSearchAlgorithm
-from src.game import Game, ResultRecord
+from src.game import Game, ResultRecord, TimeoutError
 from src.game_config import GameConfig
+from src.node import Node
 from src.state import State
 from src.algorithms import AStar, GBFS
-from src.heuristics import manhattan_distance, ann_distance
+from src.heuristics import CallableHeuristicClass, manhattan_distance, ann_distance
 
 df = pd.read_csv("data/input/experimental_data.csv")
 
@@ -41,7 +43,10 @@ def _is_board_playable(board: List[int]) -> bool:
 
 
 def play_on_one(
-    start_board: List[int], algorithm: InformedSearchAlgorithm, heuristic
+    start_board: List[int],
+    algorithm: InformedSearchAlgorithm,
+    heuristic: CallableHeuristicClass,
+    timeout: int = 60,
 ) -> ResultRecord:
     game_config = GameConfig(
         start_state=State(*start_board),
@@ -50,26 +55,88 @@ def play_on_one(
     algorithm_instance = algorithm(heuristic=heuristic)
     g = Game(game_config=game_config, algorithm=algorithm_instance, ignore_solvability=False)
 
-    def run_game():
-        nonlocal result_record
-        result_record = g._play()
+    def run_play():
+        nonlocal search_result
+        try:
+            search_result = g._play()
+        except TimeoutError:
+            search_result = None
 
-    result_record = None
+    search_result = None
 
-    game_thread = threading.Thread(target=run_game)
-    game_thread.start()
+    start_time = time.time()
 
-    # Set a timeout for the thread
-    timeout_seconds = 60  # Adjust as needed
-    game_thread.join(timeout_seconds)
+    play_thread = threading.Thread(target=run_play)
+    play_thread.start()
+    play_thread.join(timeout=timeout)
 
-    # Check if the thread is still running after the timeout
-    if game_thread.is_alive():
-        # If it's still running, terminate the thread and handle timeout
-        game_thread.terminate()  # You may need to implement the termination logic
-        result_record = None  # Handle the timeout situation
+    if play_thread.is_alive():
+        play_thread.join()  # Ensures the thread is terminated properly
+        st.write("Time limit reached. Aborting the game...")
+        search_result = None
 
-    return result_record
+    end_time = time.time()
+    execution_time = end_time - start_time
+
+    path = search_result.path if search_result else None
+    path_length = len(search_result.path) - 1 if search_result else -1
+    time_cp = search_result.time_cp if search_result else -1
+    space_cp = search_result.space_cp if search_result else -1
+
+    return ResultRecord(path, path_length, time_cp, space_cp, execution_time)
+
+
+def display_node_state(node: Union[Node, List[int]]):
+    try:
+        n = int(len(node.state.array) ** 0.5)
+        array = node.state.array
+    except Exception:
+        n = int(len(node) ** 0.5)
+        array = node
+
+    columns = st.columns(n)
+    for i in range(n):
+        for j in range(n):
+            idx = i * n + j
+            columns[j].write(array[idx], width=100)
+
+
+def main(board):
+    heuristic = ann_distance if heu_choice == "ANN distance" else manhattan_distance
+    algorithm = AStar if algo_choice == "A*" else GBFS
+
+    result_record = play_on_one(start_board=board, algorithm=algorithm, heuristic=heuristic)
+
+    path = result_record.path
+    # current_node_idx = 0
+
+    if path:
+        st.write("### Basic information")
+        st.write(f"Board:")
+        display_node_state(board)
+        st.write(f"Path length: {result_record.path_length}")
+        st.write(f"Time complexity: {result_record.time_cp}")
+        st.write(f"Space complexity: {result_record.space_cp}")
+        st.write(f"Runtime: {result_record.time}")
+
+        st.write("### Path")
+        for idx, node in enumerate(path):
+            if idx == 0:
+                st.write("Start node:")
+            else:
+                st.write(f"Node {idx}:")
+            display_node_state(node.state.array)
+            st.write("---")
+
+        # if st.button("Next Node"):
+        #     if current_node_idx < len(path) - 1:
+        #         current_node_idx += 1
+        #     else:
+        #         st.write("End of Path reached.")
+        #     st.write(f"Next Node: {current_node_idx + 1}")
+        #     display_node_state(path[current_node_idx])
+    else:
+        st.write("No path found within time limit.")
 
 
 st.set_page_config(
@@ -118,13 +185,7 @@ if exec_btn:
             f"Board is not valid or not playable. Please provide a valid board.\nError: {e}"
         )
         st.stop()
-
-    heuristic = ann_distance if heu_choice == "ANN distance" else manhattan_distance
-    algorithm = AStar if algo_choice == "A*" else GBFS
-
-    result_record = play_on_one(start_board=board, algorithm=algorithm, heuristic=heuristic)
-    st.write(result_record.time_cp)
-
+    main(board)
 
 if random_exec_btn:
     board_choice = generate_random_board()
@@ -135,9 +196,4 @@ if random_exec_btn:
             f"Board is not valid or not playable. Please provide a valid board.\nError: {e}"
         )
         st.stop()
-
-    heuristic = ann_distance if heu_choice == "ANN distance" else manhattan_distance
-    algorithm = AStar if algo_choice == "A*" else GBFS
-
-    result_record = play_on_one(start_board=board, algorithm=algorithm, heuristic=heuristic)
-    st.write(result_record.time_cp)
+    main(board)
