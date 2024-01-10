@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-from torch import device
 import torch.nn.functional as F
 
 import numpy as np
@@ -74,7 +73,7 @@ def batch_infer(dataframe, model, batch_size=64) -> List[int]:
 
     with torch.no_grad(), tqdm(total=len(input_data)) as pbar:
         for batch in range(0, len(input_data), batch_size):  # assuming batch_size is defined
-            batch_input = input_data[batch : batch + batch_size]
+            batch_input = input_data[batch : batch + batch_size]  # noqa
             output = model(batch_input)
             predicted_values.extend(output.squeeze().tolist())
             pbar.update(len(batch_input))

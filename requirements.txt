@@ -6,3 +6,4 @@ pytorch
 seaborn
 scikit-learn
 requests
+streamlit

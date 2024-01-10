@@ -39,7 +39,7 @@ class SearchResult(object):
         print(self.result)
         if self.path is not None:
             print("Path:")
-            print(f"\tLength: {len(self.path)-1}")
+            print(f"\tLength: {len(self.path) - 1}")
             for p in self.path:
                 print(f"\t{p}")
         else:
@@ -78,10 +78,12 @@ class SearchAlgorithm(ABC):
     def _search(self, start_state: State) -> SearchResult:
         ...
 
-    def solve(self, start_state: State, goal_state: State, print: bool = False) -> SearchResult:
+    def solve(
+        self, start_state: State, goal_state: State, do_print: bool = False
+    ) -> SearchResult:
         self._set_goal(goal_state)
         search_result = self._search(start_state)
-        if print:
+        if do_print:
             search_result.print_result()
         return search_result
 

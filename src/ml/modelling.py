@@ -139,7 +139,7 @@ def train(
     for epoch in range(num_epochs):
         model.train()
         progress_bar = tqdm(
-            train_loader, desc=f"Epoch {epoch+1}/{num_epochs}", file=open(os.devnull, "w")
+            train_loader, desc=f"Epoch {epoch + 1}/{num_epochs}", file=open(os.devnull, "w")
         )
         for inputs, targets in progress_bar:
             inputs, targets = inputs.to(device), targets.to(device)
@@ -155,7 +155,7 @@ def train(
         model.eval()
         with torch.no_grad():
             val_loss = 0.0
-            progress_bar = tqdm(val_loader, desc=f"Validation")
+            progress_bar = tqdm(val_loader, desc="Validation")
             for inputs, targets in progress_bar:
                 inputs, targets = inputs.to(device), targets.to(device)
                 outputs = model(inputs)
@@ -164,7 +164,7 @@ def train(
                     logging.info(str(progress_bar))
             val_loss /= len(val_loader)  # Average validation loss
 
-        logging.info(f"Epoch {epoch+1}/{num_epochs}, Validation Loss: {val_loss}")
+        logging.info(f"Epoch {epoch + 1}/{num_epochs}, Validation Loss: {val_loss}")
 
         # Save the best model based on validation loss
         if val_loss < best_loss:
