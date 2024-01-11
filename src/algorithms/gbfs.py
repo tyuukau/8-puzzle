@@ -17,6 +17,7 @@ class GBFS(InformedSearchAlgorithm):
 
     def __init__(self, heuristic: CallableHeuristicClass) -> None:
         super().__init__(heuristic)
+        self.name = "GBFS"
 
     def _search(self, start_state: State) -> SearchResult:
         start = PNode(start_state)

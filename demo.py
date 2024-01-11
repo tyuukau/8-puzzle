@@ -46,7 +46,7 @@ def play_on_one(
     start_board: List[int],
     algorithm: InformedSearchAlgorithm,
     heuristic: CallableHeuristicClass,
-    timeout: int = 60,
+    timeout: int = 10,
 ) -> ResultRecord:
     game_config = GameConfig(
         start_state=State(*start_board),
@@ -54,6 +54,11 @@ def play_on_one(
     )
     algorithm_instance = algorithm(heuristic=heuristic)
     g = Game(game_config=game_config, algorithm=algorithm_instance, ignore_solvability=False)
+
+    heu_choice = "ANN distance" if heuristic == ann_distance else "Manhattan distance"
+    algo_choice = algorithm_instance.name
+
+    st.write(f"Gameplay: {algo_choice} algorithm and {heu_choice} heuristic.")
 
     def run_play():
         nonlocal search_result
@@ -71,17 +76,16 @@ def play_on_one(
     play_thread.join(timeout=timeout)
 
     if play_thread.is_alive():
-        play_thread.join()  # Ensures the thread is terminated properly
-        st.write("Time limit reached. Aborting the game...")
-        search_result = None
+        st.write("Time limit reached. Game aborted...")
+        st.stop()
 
     end_time = time.time()
     execution_time = end_time - start_time
 
-    path = search_result.path if search_result else None
-    path_length = len(search_result.path) - 1 if search_result else -1
-    time_cp = search_result.time_cp if search_result else -1
-    space_cp = search_result.space_cp if search_result else -1
+    path = search_result.path
+    path_length = len(search_result.path) - 1
+    time_cp = search_result.time_cp
+    space_cp = search_result.space_cp
 
     return ResultRecord(path, path_length, time_cp, space_cp, execution_time)
 
@@ -98,21 +102,31 @@ def display_node_state(node: Union[Node, List[int]]):
     for i in range(n):
         for j in range(n):
             idx = i * n + j
-            columns[j].write(array[idx], width=100)
+            columns[j].write(array[idx])
 
 
-def main(board):
+def main(board_choice, heu_choice, algo_choice, time_choice):
+    try:
+        board = parse_board_string(board_choice)
+    except Exception as e:
+        st.error(
+            f"Board is not valid or not playable. Please provide a valid board.\nError: {e}"
+        )
+        st.stop()
+
     heuristic = ann_distance if heu_choice == "ANN distance" else manhattan_distance
     algorithm = AStar if algo_choice == "A*" else GBFS
+    timeout = time_choice
 
-    result_record = play_on_one(start_board=board, algorithm=algorithm, heuristic=heuristic)
+    result_record = play_on_one(
+        start_board=board, algorithm=algorithm, heuristic=heuristic, timeout=timeout
+    )
 
     path = result_record.path
-    # current_node_idx = 0
 
     if path:
         st.write("### Basic information")
-        st.write(f"Board:")
+        st.write("Board:")
         display_node_state(board)
         st.write(f"Path length: {result_record.path_length}")
         st.write(f"Time complexity: {result_record.time_cp}")
@@ -172,28 +186,18 @@ st.sidebar.markdown("### Heuristic:")
 heu_list = ["Manhattan distance", "ANN distance"]
 heu_choice = st.sidebar.selectbox("Choose one...", heu_list)
 
+st.sidebar.markdown("### Timeout:")
+options = [10, 20, 30, 40, 50, 60]
+time_choice = st.sidebar.selectbox("Choose one... (seconds)", options)
+
 st.sidebar.markdown("### Let's Run!")
 exec_btn = st.sidebar.button("Execute")
 
 random_exec_btn = st.sidebar.button("Random board and execute")
 
 if exec_btn:
-    try:
-        board = parse_board_string(board_choice)
-    except Exception as e:
-        st.error(
-            f"Board is not valid or not playable. Please provide a valid board.\nError: {e}"
-        )
-        st.stop()
-    main(board)
+    main(board_choice, heu_choice, algo_choice, time_choice)
 
 if random_exec_btn:
     board_choice = generate_random_board()
-    try:
-        board = parse_board_string(board_choice)
-    except Exception as e:
-        st.error(
-            f"Board is not valid or not playable. Please provide a valid board.\nError: {e}"
-        )
-        st.stop()
-    main(board)
+    main(board_choice, heu_choice, algo_choice, time_choice)

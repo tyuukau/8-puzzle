@@ -17,6 +17,7 @@ class AStar(InformedSearchAlgorithm):
 
     def __init__(self, heuristic: CallableHeuristicClass) -> None:
         super().__init__(heuristic)
+        self.name = "A*"
 
     def _search(self, start_state: State) -> SearchResult:
         start = PNode(start_state)

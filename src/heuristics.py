@@ -85,14 +85,14 @@ class GaschnigDistance(CallableHeuristicClass):
 
 class AnnDistance(CallableHeuristicClass):
     """
-    Calculates the Misplaced-tile distance between the current state and the goal state.
+    Calculates the ANN distance between the current state and the goal state.
 
     Args:
     - `current_state` (`State`): The current state of the puzzle.
     - `goal_state` (`State`): The goal state of the puzzle.
 
     Returns:
-    - `int`: The Misplaced-tile distance between the current state and the goal state.
+    - `int`: The ANN distance between the current state and the goal state.
     """
 
     def __init__(self, model_path: str = "data/models/puzzle_model.pth") -> None:
