@@ -157,9 +157,7 @@ def main():
         start_board = args.board
 
         game_config = GameConfig(
-            # start_state=State(12, 0, 15, 2, 8, 4, 3, 5, 6, 14, 1, 11, 10, 7, 9, 13),
             start_state=State(*start_board),
-            goal_state=State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0),
         )
         algorithm = AStar(heuristic=manhattan_distance)
         g = Game(game_config=game_config, algorithm=algorithm, ignore_solvability=False)

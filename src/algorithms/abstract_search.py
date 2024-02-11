@@ -1,4 +1,3 @@
-from typing import List, Union
 from enum import Enum
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
@@ -22,7 +21,7 @@ class SearchResult(object):
 
     Attributes:
     - `result (Result)`: The result of the search.
-    - `path (Union[List[Node], None])`: The path from the start node to the goal node, if found.
+    - `path (list[Node] | None)`: The path from the start node to the goal node, if found.
     - `time_cp (int)`: The time complexity of the search algorithm.
     - `space_cp (int)`: The space complexity of the search algorithm.
 
@@ -31,7 +30,7 @@ class SearchResult(object):
     """
 
     result: Result
-    path: Union[List[Node], None]
+    path: list[Node] | None
     time_cp: int
     space_cp: int
 
@@ -64,8 +63,8 @@ class SearchAlgorithm(ABC):
     def _is_goal(self, node: Node) -> bool:
         return node.state == self.goal_state
 
-    def _reconstruct_path(self, node: Node) -> List[Node]:
-        path = []
+    def _reconstruct_path(self, node: Node) -> list[Node]:
+        path: list[Node] = []
         while node is not None:
             path.append(node)
             node = node.parent
@@ -75,8 +74,7 @@ class SearchAlgorithm(ABC):
         self.goal_state = goal_state
 
     @abstractmethod
-    def _search(self, start_state: State) -> SearchResult:
-        ...
+    def _search(self, start_state: State) -> SearchResult: ...  ## noqa
 
     def solve(
         self, start_state: State, goal_state: State, do_print: bool = False

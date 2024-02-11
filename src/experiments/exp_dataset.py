@@ -3,7 +3,7 @@ import numpy as np
 import warnings
 
 
-def make_exp_dataset():
+def make_exp_dataset() -> None:
     warnings.filterwarnings("ignore", category=FutureWarning)
 
     df = pd.read_csv("data/input/fifteen-puzzle-6M.csv")

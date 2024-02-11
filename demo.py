@@ -1,4 +1,3 @@
-from typing import List, Union
 import streamlit as st
 
 import threading
@@ -16,41 +15,41 @@ from src.heuristics import CallableHeuristicClass, manhattan_distance, ann_dista
 
 df = pd.read_csv("data/input/experimental_data.csv")
 
+NUM_15_PUZZLE = 16
+
 
 def generate_random_board(df: pd.DataFrame = df) -> str:
     random_index = random.randint(0, len(df) - 1)
     random_row = df.iloc[random_index]
 
-    concatenated_values = " ".join(str(random_row[str(i)]) for i in range(16))
+    concatenated_values = " ".join(str(random_row[str(i)]) for i in range(NUM_15_PUZZLE))
     return concatenated_values
 
 
-def parse_board_string(board_string: str) -> List[int]:
+def parse_board_string(board_string: str) -> list[int]:
     board_list = list(map(int, board_string.split()))
-    if not (set(board_list) == set(range(16)) and len(board_list) == 16):
+    if not (set(board_list) == set(range(NUM_15_PUZZLE)) and len(board_list) == NUM_15_PUZZLE):
         raise ValueError("Invalid board")
     if not _is_board_playable(board_list):
         raise ValueError("Unplayable board")
     return board_list
 
 
-def _is_board_playable(board: List[int]) -> bool:
+def _is_board_playable(board: list[int]) -> bool:
     game_config = GameConfig(
         start_state=State(*board),
-        goal_state=State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0),
     )
     return game_config.is_solvable()
 
 
 def play_on_one(
-    start_board: List[int],
+    start_board: list[int],
     algorithm: InformedSearchAlgorithm,
     heuristic: CallableHeuristicClass,
     timeout: int = 10,
 ) -> ResultRecord:
     game_config = GameConfig(
         start_state=State(*start_board),
-        goal_state=State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0),
     )
     algorithm_instance = algorithm(heuristic=heuristic)
     g = Game(game_config=game_config, algorithm=algorithm_instance, ignore_solvability=False)
@@ -90,7 +89,7 @@ def play_on_one(
     return ResultRecord(path, path_length, time_cp, space_cp, execution_time)
 
 
-def display_node_state(node: Union[Node, List[int]]):
+def display_node_state(node: Node | list[int]) -> None:
     try:
         n = int(len(node.state.array) ** 0.5)
         array = node.state.array
@@ -105,7 +104,7 @@ def display_node_state(node: Union[Node, List[int]]):
             columns[j].write(array[idx])
 
 
-def main(board_choice, heu_choice, algo_choice, time_choice):
+def main(board_choice, heu_choice, algo_choice, time_choice) -> None:
     try:
         board = parse_board_string(board_choice)
     except Exception as e:

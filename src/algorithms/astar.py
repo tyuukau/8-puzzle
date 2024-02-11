@@ -1,4 +1,3 @@
-from typing import Set
 from queue import PriorityQueue
 
 from ..heuristics import CallableHeuristicClass
@@ -26,7 +25,7 @@ class AStar(InformedSearchAlgorithm):
         frontier: PriorityQueue[PNode] = PriorityQueue()
         frontier.put(start)
 
-        closed: Set[State] = set()
+        closed: set[State] = set()
 
         time_cp = 0
         space_cp = len(closed) + frontier.qsize()

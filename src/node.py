@@ -1,4 +1,5 @@
-from typing import Iterator, Optional, Self
+from typing import Self
+from collections.abc import Iterator
 from enum import Enum
 
 from .state import State
@@ -22,7 +23,7 @@ class Node(object):
     - `cost` (`int`): The cost of the path from the initial state to the node.
 
     Methods:
-    - `expand() -> List[Node]`:
+    - `expand() -> list[Node]`:
         Returns a list of neighbors expanded from the node.
     """
 
@@ -31,8 +32,8 @@ class Node(object):
     def __init__(
         self,
         state: State,
-        parent: Optional[Self] = None,
-        action: Optional[Action] = None,
+        parent: Self | None,
+        action: Action | None,
         cost: int = 0,
     ) -> None:
         self.state = state
@@ -109,11 +110,11 @@ class PNode(Node):
     def __init__(
         self,
         state: State,
-        parent: Optional[Self] = None,
-        action: Optional[Action] = None,
+        parent: Self | None,
+        action: Action | None,
         cost: int = 0,
         f_cost: int = 0,
-    ):
+    ) -> None:
         super().__init__(state, parent, action, cost)
         self.f_cost = f_cost
 

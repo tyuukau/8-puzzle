@@ -4,12 +4,11 @@ import torch.nn.functional as F
 
 import numpy as np
 
-from typing import List
 from tqdm import tqdm
 
 
 class PuzzleHeuristicModel(nn.Module):
-    def __init__(self, input_size, hidden_sizes):
+    def __init__(self, input_size, hidden_sizes) -> None:
         super(PuzzleHeuristicModel, self).__init__()
         all_sizes = [input_size] + hidden_sizes + [1]
         self.hidden_layers = nn.ModuleList(
@@ -49,7 +48,7 @@ def get_model(model_path: str = "data/models/puzzle_model.pth") -> nn.Module:
     return model.to(device)
 
 
-def infer(input_data: List[int], model: PuzzleHeuristicModel) -> int:
+def infer(input_data: list[int], model: PuzzleHeuristicModel) -> int:
     input_data = torch.tensor(
         np.eye(16)[np.array(input_data).astype(np.int64)].ravel(), dtype=torch.float32
     ).unsqueeze(
@@ -63,7 +62,7 @@ def infer(input_data: List[int], model: PuzzleHeuristicModel) -> int:
     return int(round(predicted_value))
 
 
-def batch_infer(dataframe, model, batch_size=64) -> List[int]:
+def batch_infer(dataframe, model, batch_size=64) -> list[int]:
     input_data = torch.tensor(
         np.eye(16)[dataframe.iloc[:, :16].values.astype(np.int64)].reshape(-1, 16, 256),
         dtype=torch.float32,

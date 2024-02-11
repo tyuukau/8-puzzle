@@ -1,4 +1,3 @@
-from typing import List
 import pandas as pd
 from tqdm import tqdm
 
@@ -15,11 +14,10 @@ from ..game import Game, ResultRecord
 
 
 def play_on_one(
-    start_board: List[int], algorithm: InformedSearchAlgorithm, heuristic_func
+    start_board: list[int], algorithm: InformedSearchAlgorithm, heuristic_func
 ) -> ResultRecord:
     game_config = GameConfig(
         start_state=State(*start_board),
-        goal_state=State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0),
     )
     algorithm_instance = algorithm(heuristic=heuristic_func)
     g = Game(game_config=game_config, algorithm=algorithm_instance, ignore_solvability=False)
@@ -33,7 +31,7 @@ def conduct_algorithm_heuristic_experiment(
     algorithm: InformedSearchAlgorithm,
     heuristic: CallableHeuristicClass,
     experiment_folder_path: str,
-):
+) -> pd.DataFrame:
     for index, row in tqdm(df.iterrows(), total=len(df), desc="Processing rows"):
         start_board = row[:16].tolist()
         result = play_on_one(start_board, algorithm, heuristic)
@@ -61,7 +59,7 @@ def conduct_algorithm_heuristic_experiment_(
     df: pd.DataFrame,
     algorithm: InformedSearchAlgorithm,
     heuristic: CallableHeuristicClass,
-):
+) -> pd.DataFrame:
     for index, row in tqdm(df.iterrows(), total=len(df), desc="Processing rows"):
         start_board = row[:16].tolist()
         result = play_on_one(start_board, algorithm, heuristic)
@@ -74,7 +72,7 @@ def conduct_algorithm_heuristic_experiment_(
     return df
 
 
-def experiment_on_part(experiment_folder_path, part):
+def experiment_on_part(experiment_folder_path, part) -> pd.DataFrame:
     result = conduct_algorithm_heuristic_experiment_(part[1], GBFS, manhattan_distance)
     return result
 
@@ -83,7 +81,7 @@ def conduct_algorithm_experiment(
     experiment_data_path: str,
     experiment_folder_path: str,
     n: int = 0,
-):
+) -> None:
     if n > 0:
         df = pd.read_csv(experiment_data_path, nrows=n)
     else:

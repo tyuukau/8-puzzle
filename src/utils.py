@@ -4,12 +4,12 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-def make_dir(dir):
+def make_dir(dir) -> None:
     if not os.path.exists(dir):
         os.makedirs(dir)
 
 
-def create_scatterplot_and_save(df, x, y, file_path):
+def create_scatterplot_and_save(df, x, y, file_path) -> None:
     plt.rcParams["font.family"] = "SF Compact Text"
     font_scale = 2
     sns.set(font_scale=font_scale, font="SF Compact Text")

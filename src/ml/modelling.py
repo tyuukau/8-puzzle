@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
+from torch import Tensor
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -16,13 +17,13 @@ from ..utils import make_dir
 
 
 class PuzzleDataset(Dataset):
-    def __init__(self, data):
+    def __init__(self, data) -> None:
         self.data = data
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.data)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx) -> tuple[Tensor, Tensor]:
         state = torch.tensor(self.data.iloc[idx, :-1].values, dtype=torch.float32)
         state_one_hot = torch.tensor(
             np.eye(16)[state.to(torch.int64)].ravel(), dtype=torch.float32
@@ -32,14 +33,14 @@ class PuzzleDataset(Dataset):
 
 
 class PuzzleHeuristicModel(nn.Module):
-    def __init__(self, input_size, hidden_sizes):
+    def __init__(self, input_size, hidden_sizes) -> None:
         super(PuzzleHeuristicModel, self).__init__()
         all_sizes = [input_size] + hidden_sizes + [1]
         self.hidden_layers = nn.ModuleList(
             [nn.Linear(all_sizes[i], all_sizes[i + 1]) for i in range(len(all_sizes) - 1)]
         )
 
-    def forward(self, x):
+    def forward(self, x: Tensor) -> Tensor:
         for layer in self.hidden_layers[:-1]:
             x = F.relu(layer(x))
         x = self.hidden_layers[-1](x)
@@ -48,7 +49,7 @@ class PuzzleHeuristicModel(nn.Module):
 
 def train(
     input_file_path: str, save_model_dir: str, run_name: str, n: int, should_stratify: bool
-):
+) -> None:
     working_dir = save_model_dir + run_name
     make_dir(working_dir)
 

@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from .state import State
 
 
@@ -25,7 +23,11 @@ class GameConfig(object):
 
     __slots__ = ["width", "start_state", "goal_state", "solvable"]
 
-    def __init__(self, start_state: State, goal_state: State) -> None:
+    def __init__(
+        self,
+        start_state: State,
+        goal_state: State = State(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0),
+    ) -> None:
         self.width = start_state.width
         self.start_state = start_state
         self.goal_state = goal_state
@@ -40,7 +42,7 @@ class GameConfig(object):
         ):
             raise ValueError("The dimension of the start and goal states must be consistent")
 
-    def _count_inversions(self, numbers: Tuple[int]) -> int:
+    def _count_inversions(self, numbers: tuple[int]) -> int:
         inversions = 0
         for i in range(0, len(numbers)):
             n = numbers[i]

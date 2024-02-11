@@ -4,8 +4,6 @@ import time
 from dataclasses import dataclass
 import signal
 
-from typing import List, Union
-
 from .algorithms.abstract_search import SearchResult
 from .game_config import GameConfig
 from .algorithms.abstract_search import SearchAlgorithm
@@ -19,14 +17,14 @@ class ResultRecord(object):
     Represents the result of a search algorithm.
 
     Attributes:
-    - `path (List[Node])`: The path from the start node to the goal node, if found.
+    - `path (list[Node])`: The path from the start node to the goal node, if found.
     - `path_length (int)`: The length of the path from the start node to the goal node, if found.
     - `time_cp (int)`: The time complexity of the search algorithm.
     - `space_cp (int)`: The space complexity of the search algorithm.
     - `time (float)`: The runtime of the search algorithm.
     """
 
-    path: Union[List[Node], None]
+    path: list[Node] | None
     path_length: int
     time_cp: int
     space_cp: int

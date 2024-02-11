@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from ..heuristics import CallableHeuristicClass
 from ..algorithms.abstract_search import Result, SearchResult, InformedSearchAlgorithm
 from ..node import PNode
@@ -18,15 +16,16 @@ class RBFS(InformedSearchAlgorithm):
     def __init__(self, heuristic: CallableHeuristicClass, limit: int = 1e15) -> None:
         super().__init__(heuristic)
         self.limit = limit
+        self.name = "RBFS"
 
     def _rbfs(
         self, node: PNode, limit: int, time_cp: int = 1, space_cp: int = 1
-    ) -> Tuple[SearchResult, int]:
+    ) -> tuple[SearchResult, int]:
         if self._is_goal(node):
             path = self._reconstruct_path(node)
             return SearchResult(Result.SUCCESS, path, time_cp, space_cp), limit
 
-        children = []
+        children: list[PNode] = []
 
         for child in node.expand():
             child.f_cost = max(child.cost + self.h_cost(child), node.f_cost)
