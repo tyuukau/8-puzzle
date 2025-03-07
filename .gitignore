@@ -168,3 +168,5 @@ data/eda/
 
 
 data/input/fifteen-puzzle-6M.csv
+
+node_modules/
